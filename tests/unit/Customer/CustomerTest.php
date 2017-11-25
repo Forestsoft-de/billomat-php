@@ -71,7 +71,7 @@ class CustomerTest extends BaseTest
         $this->_object->setClientFactory($factory);
 
 
-        $list = $this->_object->list(10, 2);
+        $list = $this->_object->findAll(10, 2);
 
         $this->assertCount(1, $list);
         $this->assertContainsOnly('Forestsoft\Billomat\Customer\ICustomer', $list);

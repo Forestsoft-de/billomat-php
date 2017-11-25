@@ -19,7 +19,7 @@ class CustomerTest extends TestCase
 
     public function testList()
     {
-        $list = $this->_object->list();
+        $list = $this->_object->findAll();
         $this->assertGreaterThan(0, count($list));
         $this->assertContainsOnly("\Forestsoft\Billomat\Customer\ICustomer", $list);
 

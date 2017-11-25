@@ -329,7 +329,7 @@ class Customer extends Resource implements ICustomer
     /**
      *
      */
-    public function list($limit = 10, $start = 1)
+    public function findAll($limit = 10, $start = 1)
     {
         $list = [];
         $client = $this->getClientFactory()->create("clients", $this->getOptions(["billomat" => ["per_page" => $limit, "page" => $start]]));

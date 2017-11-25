@@ -668,7 +668,7 @@ interface ICustomer extends IResource
     /**
      * @return ICustomer[]
      */
-    public function list($limit = 10, $start = 1);
+    public function findAll($limit = 10, $start = 1);
 
     /**
      * @param $id
