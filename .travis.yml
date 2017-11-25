@@ -22,6 +22,7 @@ env:
 install:
   - composer self-update
   - composer clear-cache
+  - composer install --require-dev
 
 script:
   - vendor/bin/phpunit -c tests/unit/phpunit-cc.xml
