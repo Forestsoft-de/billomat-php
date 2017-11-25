@@ -1,0 +1,9 @@
+
+integration:
+  billomat:
+    apiKey: my_secret_api_key
+    billomatId: my_account
+    page: 1
+    perPage: 10
+    language: de_DE
+    order: "firstname:asc"

@@ -1,0 +1,7 @@
+composer.lock
+vendor/
+.idea/
+tests/config.yml
+tests/report
+
+
