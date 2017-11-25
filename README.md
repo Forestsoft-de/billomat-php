@@ -1,5 +1,7 @@
 # ForestSoft Billomat API
 
+[![Build Status](https://travis-ci.org/Forestsoft-de/billomat-php.svg?branch=master)](https://travis-ci.org/Forestsoft-de/billomat-php)
+
 This API implements the RESTful webservice of Billomat Billomat GmbH & Co. KG (https://www.billomat.com/)
 
 ## Notice
