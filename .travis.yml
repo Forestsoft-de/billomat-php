@@ -20,7 +20,7 @@ install:
   - composer install
 
 script:
-  - vendor/bin/phpunit --coverage-clover=coverage.xml tests/unit/
+  - vendor/bin/phpunit --coverage-clover=coverage.xml -c tests/unit/phpunit-cc.xml tests/unit/
 
 after_success:
   - bash <(curl -s https://codecov.io/bash) -F unittests
