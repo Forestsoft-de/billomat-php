@@ -24,7 +24,7 @@ install:
   - composer clear-cache
 
 script:
-  - ./vendor/bin/phpunit -c tests/unit/phpunit-cc.xml
+  - vendor/bin/phpunit -c tests/unit/phpunit-cc.xml
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
