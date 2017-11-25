@@ -94,7 +94,10 @@ abstract class Resource implements IResource
         return $this;
     }
 
-    public function getClientFactory(): \Forestsoft\Billomat\Factory\IClient
+    /**
+     * @return Factory\IClient
+     */
+    public function getClientFactory()
     {
         if ($this->_clientFactory == null) {
             $this->setClientFactory(\Forestsoft\Billomat\Factory\Client::getInstance());

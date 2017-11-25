@@ -19,7 +19,12 @@ class Client extends AbstractFactory implements IClient, IFactory
      */
     private static $instance = null;
 
-    public static function factory($uri = "", $config = []): \Forestsoft\Billomat\Client\IClient
+    /**
+     * @param string $uri
+     * @param array $config
+     * @return mixed
+     */
+    public static function factory($uri = "", $config = [])
     {
         $instance = self::getInstance();
         return $instance->create($uri, $config);
@@ -68,7 +73,7 @@ class Client extends AbstractFactory implements IClient, IFactory
     /**
      * @return IFactory
      */
-    public static function getInstance(): \Forestsoft\Billomat\Factory\IFactory
+    public static function getInstance()
     {
         if (self::$factoryInstance == null) {
             self::$factoryInstance = new self();
@@ -81,7 +86,7 @@ class Client extends AbstractFactory implements IClient, IFactory
      * @param array $config
      * @return \Forestsoft\Billomat\Client\IClient
      */
-    public function create($uri = "", $config = []): \Forestsoft\Billomat\Client\IClient
+    public function create($uri = "", $config = [])
     {
         $defaults = $this->getDefaultConfig();
         

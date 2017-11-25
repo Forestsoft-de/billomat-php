@@ -99,7 +99,7 @@ class HttpTest extends TestCase
     /**
      * @return \PHPUnit_Framework_MockObject_MockObject
      */
-    protected function createResponse($httpStatus = 200, $reasonPhrase = ""): \PHPUnit_Framework_MockObject_MockObject
+    protected function createResponse($httpStatus = 200, $reasonPhrase = "")
     {
         $responseMock = $this->getMockBuilder('Zend\Http\Response')->getMock();
         $this->_mock->expects($this->any())->method("send")->willReturn($responseMock);

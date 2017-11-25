@@ -12,8 +12,11 @@ class Customer extends AbstractFactory implements IFactory, ICustomer
 {
 
     protected static $factoryInstance;
-    
-    public function create(): \Forestsoft\Billomat\Customer\ICustomer
+
+    /**
+     * @return \Forestsoft\Billomat\Customer\ICustomer
+     */
+    public function create()
     {
           $customer = new \Forestsoft\Billomat\Customer\Customer();
 
@@ -22,8 +25,10 @@ class Customer extends AbstractFactory implements IFactory, ICustomer
           return $customer;
     }
 
-
-    public static function getInstance(): \Forestsoft\Billomat\Factory\IFactory
+    /**
+     * @return IFactory
+     */
+    public static function getInstance()
     {
         if (self::$factoryInstance == null) {
             self::$factoryInstance = new self();

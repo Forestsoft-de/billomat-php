@@ -13,8 +13,8 @@ interface IFactory
 {
 
     /**
-     * @return Client
+     * @return IFactory
      */
-    public static function getInstance(): \Forestsoft\Billomat\Factory\IFactory;
+    public static function getInstance();
 
 }

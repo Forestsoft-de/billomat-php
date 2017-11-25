@@ -11,5 +11,8 @@ namespace Forestsoft\Billomat\Factory;
 
 interface ICustomer extends IFactory
 {
-    public function create(): \Forestsoft\Billomat\Customer\ICustomer;
+    /**
+     * @return \Forestsoft\Billomat\Customer\ICustomer
+     */
+    public function create();
 }

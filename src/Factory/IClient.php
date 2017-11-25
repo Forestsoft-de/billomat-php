@@ -15,7 +15,7 @@ interface IClient
      * @param array $config
      * @return \Forestsoft\Billomat\Client\IClient
      */
-    public function create($uri = "", $config = []): \Forestsoft\Billomat\Client\IClient;
+    public function create($uri = "", $config = []);
     
     /**
      * @param string $uri
@@ -23,6 +23,6 @@ interface IClient
      * 
      * @return \Zend\Http\Client
      */
-    public static function factory($uri = "", $config = []): \Forestsoft\Billomat\Client\IClient;
+    public static function factory($uri = "", $config = []);
 
 }
