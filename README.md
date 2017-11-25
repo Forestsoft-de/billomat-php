@@ -17,7 +17,7 @@ user@terminal$ ./vendor/bin/phpunit -c tests/unit/phpunit.xml
 ```
 user@terminal$ cp tests/config.dist.yml tests/config.yml
 user@terminal$ nano tests/config.yml # Provide user credentials for Billomat API
-user@terminal$ ./vendor/bin/phpunit -c tests/unit/phpunit.xml
+user@terminal$ ./vendor/bin/phpunit -c tests/integration/phpunit.xml
 ```
 
 ## Todos
