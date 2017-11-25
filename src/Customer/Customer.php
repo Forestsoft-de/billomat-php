@@ -95,7 +95,7 @@ class Customer extends Resource implements ICustomer
     /**
      * @return bool
      */
-    public function isEnabledCustomerPortal(): bool
+    public function isEnabledCustomerPortal()
     {
         return $this->_enableCustomerPortal;
     }
@@ -104,7 +104,7 @@ class Customer extends Resource implements ICustomer
      * @param bool $enableCustomerPortal
      * @return Customer
      */
-    public function setEnabledCustomerPortal($enableCustomerPortal): Customer
+    public function setEnabledCustomerPortal($enableCustomerPortal)
     {
         $this->_enableCustomerPortal = $enableCustomerPortal;
         return $this;

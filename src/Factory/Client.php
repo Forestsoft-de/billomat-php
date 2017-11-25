@@ -128,7 +128,7 @@ class Client extends AbstractFactory implements IClient, IFactory
      * @param $config
      * @return Http
      */
-    protected function createHttpClient($uri, $config): Http
+    protected function createHttpClient($uri, $config)
     {
         $client = new Http($uri, $config);
         return $client;
