@@ -17,7 +17,7 @@ env:
 install:
   - composer self-update
   - composer clear-cache
-  - composer install
+  - composer update
 
 script:
   - vendor/bin/phpunit --coverage-clover=coverage.xml -c tests/unit/phpunit-cc.xml tests/unit/
