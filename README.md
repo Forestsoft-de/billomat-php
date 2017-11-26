@@ -35,6 +35,10 @@ https://www.billomat.com/api/account/
 https://www.billomat.com/api/artikel/
 * Have to implement completly
 
+#### Invoices
+https://www.billomat.com/api/rechnungen/
+* Have to implement completly
+
 #### Customers
 https://www.billomat.com/api/kunden/
 * Update an Customer
@@ -43,9 +47,7 @@ https://www.billomat.com/api/kunden/
 https://www.billomat.com/api/lieferanten/
 * Have to implement completly
 
-#### Invoices
-https://www.billomat.com/api/rechnungen/
-* Have to implement completly
+
  
 #### Recurrings
 https://www.billomat.com/api/abo-rechnungen/
