@@ -43,8 +43,22 @@ class CustomerTest extends BaseTest
 
         $this->_object->setClientFactory($factory);
 
-
         $this->_object->create();
+    }
+
+    public function testCreateShouldReturnCustomer()
+    {
+        $this->_factory->expects($this->once())->method("create")->with("clients/create", $this->_expectedOptions)->willReturn($this->_client);
+        $customerResponse = ["client" => ["id" => 1010, "name" => "Luca Benakovic"]];
+        $this->_client->expects($this->once())->method("request")->willReturn($customerResponse);
+
+        $this->_object->setClientFactory($this->_factory);
+
+        $actual = $this->_object->create();
+
+        $this->assertInstanceOf(get_class($this->_object), $actual);
+        $this->assertEquals(1010, $actual->getId());
+        $this->assertEquals('Luca Benakovic', $actual->getName());
     }
 
     protected function tearDown()
@@ -55,7 +69,7 @@ class CustomerTest extends BaseTest
     }
 
 
-    public function testList()
+    public function testfindAll()
     {
         $client = $this->getMockBuilder('Forestsoft\Billomat\Client\IClient')->getMock();
         $factory = $this->getMockBuilder('Forestsoft\Billomat\Factory\IClient')->getMock();
@@ -178,7 +192,7 @@ class CustomerTest extends BaseTest
 
         $this->_object->setBillomatId("myBillomatId");
 
-        $client->expects($this->once())->method("request")->willReturn(["clients" => ["client" => [["name" => "Sebastian"]]]]);
+        $client->expects($this->once())->method("request")->willReturn(["client" => ["name" => "Sebastian", "id" => 1010]]);
 
         $factory->expects($this->once())->method("create")->with("clients/1010", $this->_expectedOptions)->willReturn($client);
 
@@ -188,6 +202,8 @@ class CustomerTest extends BaseTest
 
         $this->assertInstanceOf('Forestsoft\Billomat\Customer\ICustomer', $customer);
 
+        $this->assertEquals(1010, $customer->getId());
+        $this->assertEquals("Sebastian", $customer->getName());
     }
 
     public function testDelete()
