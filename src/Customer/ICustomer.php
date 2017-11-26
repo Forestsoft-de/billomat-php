@@ -676,4 +676,9 @@ interface ICustomer extends IResource
      */
     public function find($id);
 
+    /**
+     * @param $array
+     * @return mixed
+     */
+    public function findBy($array);
 }

@@ -147,5 +147,11 @@ class Client extends AbstractFactory implements IClient, IFactory
                 $client->getRequest()->getQuery()->set($key, $config['billomat'][$key]);
             }
         }
+
+        if (array_key_exists('search', $config)) {
+            foreach($config['search'] as $key => $value) {
+                $client->getRequest()->getQuery()->set($key, $config['search'][$key]);
+            }
+        }
     }
 }

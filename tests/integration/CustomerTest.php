@@ -56,6 +56,19 @@ class CustomerTest extends TestCase
     }
 
     /**
+     * 
+     */
+    public function testfindBy()
+    {
+        $customers = $this->_object->findBy([\Forestsoft\Billomat\Customer\ISearch::PARAM_COUNTRY_CODE => "DE"]);
+
+        $this->assertContainsOnly('Forestsoft\Billomat\Customer\ICustomer', $customers);
+
+        $this->assertEquals("Luca", $customers[0]->getFirstName());
+        $this->assertEquals("Benakovic", $customers[0]->getLastName());
+    }
+
+    /**
      * @depends testfind
      * 
      * @group integration

@@ -7,3 +7,4 @@
  */
 
 include_once dirname(dirname(__FILE__) ) . "/TestHelper.php";
+include_once dirname(__FILE__) . "/Datasets/CustomerDataset.php";
