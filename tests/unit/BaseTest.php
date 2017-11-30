@@ -19,4 +19,30 @@ abstract class BaseTest extends TestCase
 
         return $reflection;
     }
+
+
+    /**
+     * @param $property
+     * @param $value
+     */
+    protected function performGetterSetterTest($property, $value)
+    {
+        $setter = "set" . ucfirst($property);
+        $getter = "get" . ucfirst($property);
+        $boolGetter = "is" . ucfirst($property);
+        $boolGetter2 = "has" . ucfirst($property);
+
+        if (is_callable(array($this->_object, $setter))) {
+            $this->_object->$setter($value);
+            if (is_callable(array($this->_object, $getter))) {
+                $this->assertEquals($value, $this->_object->$getter());
+            } else if (is_callable(array($this->_object, $boolGetter))) {
+                $this->assertEquals($value, $this->_object->$boolGetter());
+            } else if (is_callable(array($this->_object, $boolGetter2))) {
+                $this->assertEquals($value, $this->_object->$boolGetter2());
+            }
+        } else {
+            $this->fail(sprintf("Property %s does not exist", $property));
+        }
+    }
 }

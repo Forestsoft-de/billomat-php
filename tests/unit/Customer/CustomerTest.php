@@ -23,7 +23,7 @@ class CustomerTest extends BaseTest
     /**
      * @var Customer
      */
-    private $_object;
+    protected $_object;
 
     protected $_expectedOptions =   [
         "billomat" => [
@@ -86,24 +86,7 @@ class CustomerTest extends BaseTest
      */
     public function testGetterAndSetter($property, $value)
     {
-        $setter = "set". ucfirst($property);
-        $getter = "get". ucfirst($property);
-        $boolGetter = "is". ucfirst($property);
-        $boolGetter2 = "has". ucfirst($property);
-
-        if (is_callable(array($this->_object, $setter))) {
-            $this->_object->$setter($value);
-            if (is_callable(array($this->_object, $getter))) {
-                $this->assertEquals($value, $this->_object->$getter());
-            } else if (is_callable(array($this->_object, $boolGetter))) {
-                $this->assertEquals($value, $this->_object->$boolGetter());
-            }
-            else if (is_callable(array($this->_object, $boolGetter2))) {
-                $this->assertEquals($value, $this->_object->$boolGetter2());
-            }
-        } else {
-            $this->fail(sprintf("Property %s does not exist", $property));
-        }
+        $this->performGetterSetterTest($property, $value);
     }
 
     public function dp_gettersetter()
