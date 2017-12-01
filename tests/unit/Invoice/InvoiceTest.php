@@ -15,7 +15,7 @@ use Forestsoft\Billomat\Invoice\IInvoice;
 use Forestsoft\Billomat\Payment\IPayment;
 use Zend\Stdlib\ArrayObject;
 
-class InvoiceTest extends BaseTest
+class InvoiceTest extends AbstractResourceTest
 {
     /**
      * @var Invoice
@@ -41,6 +41,11 @@ class InvoiceTest extends BaseTest
     public function testIsInvoice()
     {
         $this->assertInstanceOf('Forestsoft\Billomat\Invoice\IInvoice', $this->_object);
+    }
+
+    public function testCreate()
+    {
+
     }
 
     /**
