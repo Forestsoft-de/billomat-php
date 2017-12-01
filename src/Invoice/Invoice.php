@@ -10,7 +10,10 @@ namespace Forestsoft\Billomat\Invoice;
 
 
 use Forestsoft\Billomat\Confirmation\IConfirmation;
+use Forestsoft\Billomat\Contact\IContact;
+use Forestsoft\Billomat\Customer\ICustomer;
 use Forestsoft\Billomat\Freetext\IFreetext;
+use Forestsoft\Billomat\IPrice;
 use Forestsoft\Billomat\IResource;
 use Forestsoft\Billomat\Offer\IOffer;
 use Forestsoft\Billomat\Resource;
@@ -19,14 +22,14 @@ use Forestsoft\Billomat\Template\ITemplate;
 class Invoice extends Resource implements IResource, IInvoice
 {
     /**
-     * @var int
+     * @var ICustomer
      */
-    protected $clientId;
+    protected $client;
 
     /**
-     * @var int
+     * @var IContact
      */
-    protected $contactId;
+    protected $contact;
 
     /**
      * @var string
@@ -205,39 +208,40 @@ class Invoice extends Resource implements IResource, IInvoice
     }
 
     /**
-     * @return int
+     * @return IContact
      */
-    public function getContactId()
+    public function getContact()
     {
-        return $this->contactId;
+        return $this->contact;
     }
 
     /**
-     * @param int $contactId
+     * @param IContact $contact
      *
      * @return IInvoice
      */
-    public function setContactId($contactId)
+    public function setContact(IContact $contact)
     {
-        $this->contactId = $contactId;
+        $this->contact = $contact;
         return $this;
     }
 
     /**
      * @return int
      */
-    public function getClientId()
+    public function getClient()
     {
-        return $this->clientId;
+        return $this->client;
     }
 
     /**
-     * @param int $clientId
+     * @param ICustomer $customer
+     *
      * @return IInvoice
      */
-    public function setClientId($clientId)
+    public function setClient(ICustomer $customer)
     {
-        $this->clientId = $clientId;
+        $this->client = $customer;
         return $this;
     }
 
@@ -319,6 +323,7 @@ class Invoice extends Resource implements IResource, IInvoice
      */
     public function setDate($date)
     {
+        $this->validate('date', $date, 'date');
         $this->date = $date;
         return $this;
     }
@@ -337,6 +342,7 @@ class Invoice extends Resource implements IResource, IInvoice
      */
     public function setSupplyDate($supplyDate)
     {
+        $this->validate('date', $supplyDate, 'supplyDate');
         $this->supplyDate = $supplyDate;
         return $this;
     }
@@ -355,7 +361,17 @@ class Invoice extends Resource implements IResource, IInvoice
      */
     public function setSupplyDateType($supplyDateType)
     {
-        $this->supplyDateType = $supplyDateType;
+        switch ($supplyDateType) {
+            case ISupplyDate::DELIVERY_DATE:
+            case ISupplyDate::DELIVERY_TEXT:
+            case ISupplyDate::SUPPLY_DATE:
+            case ISupplyDate::SUPPLY_TEXT:
+                $this->supplyDateType = $supplyDateType;
+                break;
+            default:
+                throw new \InvalidArgumentException(sprintf("%s is not a valid supplydatetype. Please use one of ISupplyDate::*", $supplyDateType));
+        }
+
         return $this;
     }
 
@@ -373,6 +389,7 @@ class Invoice extends Resource implements IResource, IInvoice
      */
     public function setDueDate($dueDate)
     {
+        $this->validate('date', $dueDate, "dueDate");
         $this->dueDate = $dueDate;
         return $this;
     }
@@ -517,6 +534,7 @@ class Invoice extends Resource implements IResource, IInvoice
      */
     public function setNetGross($netGross)
     {
+        $this->validateInterface('Forestsoft\Billomat\IPrice', $netGross, 'netGross');
         $this->netGross = $netGross;
         return $this;
     }
@@ -553,6 +571,9 @@ class Invoice extends Resource implements IResource, IInvoice
      */
     public function setPaymentTypes(array $paymentTypes)
     {
+        foreach ($paymentTypes as $type) {
+            $this->validateInterface('Forestsoft\Billomat\Payment\IPayment', $type, 'paymentType');
+        }
         $this->paymentTypes = $paymentTypes;
         return $this;
     }
@@ -608,6 +629,7 @@ class Invoice extends Resource implements IResource, IInvoice
      */
     public function setDiscountDate($discountDate)
     {
+        $this->validate("date", $discountDate, 'dicountDate');
         $this->discountDate = $discountDate;
         return $this;
     }
@@ -678,8 +700,13 @@ class Invoice extends Resource implements IResource, IInvoice
      * @param IInvoiceItem[] $items
      * @return Invoice
      */
-    public function setItems(array $items)
+    public function setItems(\Traversable $items)
     {
+        foreach ($items as $item) {
+            if (!($item instanceof IInvoiceItem)) {
+                throw new \InvalidArgumentException(sprintf("There is an invalid invoice item in item collection"));
+            }
+        }
         $this->items = $items;
         return $this;
     }
@@ -690,5 +717,15 @@ class Invoice extends Resource implements IResource, IInvoice
     public function getItems()
     {
         return $this->items;
+    }
+
+    protected function validateInterface($interfaceName, $value, $propertyName)
+    {
+        $oClass = new \ReflectionClass($interfaceName);
+        $constants =  $oClass->getConstants();
+
+        if (!in_array($value, $constants)) {
+            throw new \InvalidArgumentException(sprintf("%s is not a valid %s. Please use one of %s::*", $value, $propertyName, $interfaceName));
+        }
     }
 }

@@ -130,4 +130,16 @@ abstract class Resource implements IResource
 
         return $options;
     }
+
+    protected function validate($type, $value, $propertyName)
+    {
+        switch ($type) {
+            case "date":
+                $date = \DateTime::createFromFormat("Y-m-d", $value);
+                if (!$date) {
+                    throw new \InvalidArgumentException(sprintf("%s for property %s is not a valid date format. Use Y-m-d", $value, $propertyName));
+                }
+                break;
+        }
+    }
 }

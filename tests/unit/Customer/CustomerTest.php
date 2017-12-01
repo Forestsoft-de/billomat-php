@@ -247,13 +247,6 @@ class CustomerTest extends BaseTest
         }
     }
 
-    public function expectExceptionObject(\Exception $exception)
-    {
-        $this->expectException(\get_class($exception));
-        $this->expectExceptionMessage($exception->getMessage());
-        $this->expectExceptionCode($exception->getCode());
-    }
-
     public function dp_taxes()
     {
         return [

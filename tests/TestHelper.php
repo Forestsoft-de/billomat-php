@@ -29,4 +29,14 @@ class TestHelper
 
         return self::$config;
     }
+
+    public static function getMock($string)
+    {
+
+        $generator = new \PHPUnit_Framework_MockObject_Generator();
+        $mock = $generator->getMock($string);
+
+        return $mock;
+
+    }
 }
