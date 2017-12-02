@@ -43,10 +43,7 @@ class InvoiceTest extends AbstractResourceTest
         $this->assertInstanceOf('Forestsoft\Billomat\Invoice\IInvoice', $this->_object);
     }
 
-    public function testCreate()
-    {
-
-    }
+   
 
     /**
      * @group unit

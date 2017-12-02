@@ -205,67 +205,7 @@ class Customer extends Resource implements ICustomer
      */
     public function create()
     {
-        $client = $this->getClientFactory()->create("clients/create", $this->getOptions());
-        $data = [
-            "client" => [
-                "first_name" => $this->getFirstName(),
-                "last_name" => $this->getLastName(),
-                "archived" => $this->isArchived(),
-                "number_pre" => $this->getNumberPre(),
-                "number" => $this->getNumber(),
-                "number_length" => $this->getNumberLength(),
-                "name" => $this->getName(),
-                "street" => $this->getStreet(),
-                "zip" => $this->getZip(),
-                "city" => $this->getCity(),
-                "state" => $this->getState(),
-                "country_code" => $this->getCountryCode(),
-                "salutation" => $this->getSalutation(),
-                "phone" => $this->getPhone(),
-                "fax" => $this->getFax(),
-                "mobile" => $this->getMobile(),
-                "email" => $this->getEmail(),
-                "www" => $this->getWww(),
-                "tax_number" => $this->getTaxNumber(),
-                "vat_number" => $this->getVatNumber(),
-                "bank_account_number" => $this->getBankAccountNumber(),
-                "bank_account_owner" => $this->getBankAccountOwner(),
-                "bank_number" => $this->getBankNumber(),
-                "bank_name" => $this->getBankName(),
-                "bank_swift" => $this->getBankSwift(),
-                "bank_iban" => $this->getBankIban(),
-                "sepa_mandate" => $this->getSepaMandate(),
-                "sepa_mandate_date" => $this->getSepaMandateDate(),
-                "locale" => $this->getLocale(),
-                "tax_rule" => $this->getTaxRule(),
-                "net_gross" => $this->getNetGross(),
-                "default_payment_types" => $this->getDefaultPaymentTypes(),
-                "note" => $this->getNote(),
-                "reduction" => $this->getReduction(),
-                "discount_rate_type" => $this->getDiscountRateType(),
-                "discount_rate" => $this->getDiscountRate(),
-                "discount_days_type" => $this->getDiscountDaysType(),
-                "discount_days" => $this->getDiscountDays(),
-                "due_days_type" => $this->getDueDaysType(),
-                "due_days" => $this->getDueDays(),
-                "reminder_due_days_type" => $this->getReminderDueDaysType(),
-                "reminder_due_days" => $this->getReminderDueDays(),
-                "offer_validity_days_type" => $this->getOfferValidityDaysType(),
-                "offer_validity_days" => $this->getOfferValidityDays(),
-                "currency_code" => $this->getCurrencyCode(),
-                "price_group" => $this->getPriceGroup(),
-                "debitor_account_number" => $this->getDebitorAccountNumber(),
-            ]
-        ];
-        $customerResponse = $client->request($data);
-        $customer = $this->createCustomer();
-        
-        if (!empty($customerResponse["client"])) {
-            $mapper = $this->createMapper();
-            $mapper->map($customer, new \ArrayObject($customerResponse["client"]));
-        }
-        
-        return $customer;
+        return $this->performCrUpAction("create");
     }
 
     /**
@@ -273,7 +213,7 @@ class Customer extends Resource implements ICustomer
      */
     public function update()
     {
-        // TODO: Implement update() method.
+        return $this->performCrUpAction("update");
     }
 
     /**
@@ -1336,5 +1276,89 @@ class Customer extends Resource implements ICustomer
                     throw new \InvalidArgumentException(sprintf("%s is not a valid search. Please see ISearch::PARAM_*", $key));
             }
         }
+    }
+
+    /**
+     * @return array
+     */
+    private function prepareData(): array
+    {
+        $data = [
+            "client" => [
+                "first_name" => $this->getFirstName(),
+                "last_name" => $this->getLastName(),
+                "archived" => $this->isArchived(),
+                "number_pre" => $this->getNumberPre(),
+                "number" => $this->getNumber(),
+                "number_length" => $this->getNumberLength(),
+                "name" => $this->getName(),
+                "street" => $this->getStreet(),
+                "zip" => $this->getZip(),
+                "city" => $this->getCity(),
+                "state" => $this->getState(),
+                "country_code" => $this->getCountryCode(),
+                "salutation" => $this->getSalutation(),
+                "phone" => $this->getPhone(),
+                "fax" => $this->getFax(),
+                "mobile" => $this->getMobile(),
+                "email" => $this->getEmail(),
+                "www" => $this->getWww(),
+                "tax_number" => $this->getTaxNumber(),
+                "vat_number" => $this->getVatNumber(),
+                "bank_account_number" => $this->getBankAccountNumber(),
+                "bank_account_owner" => $this->getBankAccountOwner(),
+                "bank_number" => $this->getBankNumber(),
+                "bank_name" => $this->getBankName(),
+                "bank_swift" => $this->getBankSwift(),
+                "bank_iban" => $this->getBankIban(),
+                "sepa_mandate" => $this->getSepaMandate(),
+                "sepa_mandate_date" => $this->getSepaMandateDate(),
+                "locale" => $this->getLocale(),
+                "tax_rule" => $this->getTaxRule(),
+                "net_gross" => $this->getNetGross(),
+                "default_payment_types" => $this->getDefaultPaymentTypes(),
+                "note" => $this->getNote(),
+                "reduction" => $this->getReduction(),
+                "discount_rate_type" => $this->getDiscountRateType(),
+                "discount_rate" => $this->getDiscountRate(),
+                "discount_days_type" => $this->getDiscountDaysType(),
+                "discount_days" => $this->getDiscountDays(),
+                "due_days_type" => $this->getDueDaysType(),
+                "due_days" => $this->getDueDays(),
+                "reminder_due_days_type" => $this->getReminderDueDaysType(),
+                "reminder_due_days" => $this->getReminderDueDays(),
+                "offer_validity_days_type" => $this->getOfferValidityDaysType(),
+                "offer_validity_days" => $this->getOfferValidityDays(),
+                "currency_code" => $this->getCurrencyCode(),
+                "price_group" => $this->getPriceGroup(),
+                "debitor_account_number" => $this->getDebitorAccountNumber(),
+            ]
+        ];
+        return $data;
+    }
+
+    /**
+     * @param $action
+     * @return mixed
+     */
+    private function performCrUpAction($action)
+    {
+        if ($action === "update") {
+            $action = $this->getId() . "/" . $action;
+        }
+        $client = $this->getClientFactory()->create("clients/$action", $this->getOptions());
+        $data = $this->prepareData();
+        $customerResponse = $client->request($data);
+        $customer = $this->createCustomer();
+
+
+        if ($client->getResponse()->getStatusCode() == 200) {
+            if (!empty($customerResponse["client"])) {
+                $mapper = $this->createMapper();
+                $mapper->map($customer, new \ArrayObject($customerResponse["client"]));
+            }
+        }
+
+        return $customer;
     }
 }
