@@ -1281,7 +1281,7 @@ class Customer extends Resource implements ICustomer
     /**
      * @return array
      */
-    private function prepareData(): array
+    private function prepareData()
     {
         $data = [
             "client" => [
