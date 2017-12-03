@@ -1213,14 +1213,6 @@ class Customer extends Resource implements ICustomer
     }
 
     /**
-     * @return Mapper
-     */
-    private function createMapper()
-    {
-        return new Mapper();
-    }
-
-    /**
      * @return mixed
      */
     protected function createCustomer()

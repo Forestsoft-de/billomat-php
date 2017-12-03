@@ -47,11 +47,11 @@ class CustomerTest extends AbstractResourceTest
 
         $this->_responseMock->expects($this->any())->method("getStatusCode")->willReturn(200);
 
+        $this->_mapperMock->expects($this->once())->method('map')->with($this->_resource)->willReturn($this->_resource);
+
         $actual = $this->_object->create();
 
-        $this->assertInstanceOf(get_class($this->_object), $actual);
-        $this->assertEquals(1010, $actual->getId());
-        $this->assertEquals('Luca Benakovic', $actual->getName());
+        $this->assertInstanceOf("Forestsoft\Billomat\Customer\ICustomer", $actual);
     }
 
     public function testfindAll()
@@ -144,23 +144,20 @@ class CustomerTest extends AbstractResourceTest
         $this->_client->expects($this->once())->method("request")->willReturn(["client" => ["name" => "Sebastian", "id" => 1010]]);
 
         $this->_factory->expects($this->once())->method("create")->with("clients/1010", $this->_expectedOptions)->willReturn($this->_client);
-
+        $this->_mapperMock->expects($this->once())->method('map')->with($this->_resource)->willReturn($this->_resource);
+        
         $customer = $this->_object->find(1010);
 
         $this->assertInstanceOf('Forestsoft\Billomat\Customer\ICustomer', $customer);
-
-        $this->assertEquals(1010, $customer->getId());
-        $this->assertEquals("Sebastian", $customer->getName());
     }
 
     public function testFindBy()
     {
+        $this->_mapperMock->expects($this->once())->method('map')->with($this->_resource)->willReturn($this->_resource);
+        
         $customer = $this->prepareFindBy([ISearch::PARAM_FIRST_NAME => "Luca", ISearch::PARAM_LAST_NAME => "Benakovic"], ["clients" => ["client" => [["name" => "Luca Benakovic", "id" => 1010]]]]);
 
         $this->assertContainsOnly('Forestsoft\Billomat\Customer\ICustomer', $customer);
-
-        $this->assertEquals(1010, $customer[0]->getId());
-        $this->assertEquals("Luca Benakovic", $customer[0]->getName());
     }
 
     public function testFindByThrowExceptionIfSearchNotPossible()
@@ -175,14 +172,13 @@ class CustomerTest extends AbstractResourceTest
         $this->_client->expects($this->once(2))->method("request")->willReturn(["client" => ["name" => "Sebastian"]]);
 
         $this->_responseMock->expects($this->any())->method("getStatusCode")->willReturn(200);
-
+        $this->_mapperMock->expects($this->once())->method('map')->with($this->_resource)->willReturn($this->_resource);
         $this->_factory->expects($this->once())->method("create")->with("clients/1010/update", $this->_expectedOptions)->willReturn($this->_client);
 
         $actual = $this->_object->update();
 
-        $this->assertInstanceOf(get_class($this->_object), $actual);
+        $this->assertInstanceOf("Forestsoft\Billomat\Customer\ICustomer", $actual);
         $this->assertNotSame($this->_object, $actual);
-        $this->assertEquals("Sebastian", $actual->getName());
     }
 
     public function testDelete()
@@ -324,11 +320,8 @@ class CustomerTest extends AbstractResourceTest
         $this->_client->expects($this->any())->method("getResponse")->willReturn($this->_responseMock);
 
         $this->_factory = $this->getMockBuilder('Forestsoft\Billomat\Factory\IClient')->getMock();
-        $this->_customerFactory = $this->getMockBuilder('Forestsoft\Billomat\Factory\ICustomer')->getMock();
 
         $this->_object->setClientFactory($this->_factory);
-        
-        \Forestsoft\Billomat\Factory\Customer::setFactoryInstance($this->_customerFactory);
     }
 
     protected function tearDown()

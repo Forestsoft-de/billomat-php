@@ -24,15 +24,4 @@ class Customer extends AbstractFactory implements IFactory, ICustomer
 
           return $customer;
     }
-
-    /**
-     * @return IFactory
-     */
-    public static function getInstance()
-    {
-        if (self::$factoryInstance == null) {
-            self::$factoryInstance = new self();
-        }
-        return self::$factoryInstance;
-    }
 }

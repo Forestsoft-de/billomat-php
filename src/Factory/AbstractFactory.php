@@ -16,18 +16,27 @@ abstract class AbstractFactory
 
     private $_config = [];
 
-    protected static $factoryInstance;
+    protected static $factoryInstance = null;
 
     /**
      * @param mixed $factoryInstance
      */
     public static function setFactoryInstance(\Forestsoft\Billomat\Factory\IFactory $factoryInstance = null)
     {
-        self::$factoryInstance = $factoryInstance;
+        static::$factoryInstance = $factoryInstance;
     }
 
 
-    
+    /**
+     * @return IFactory
+     */
+    public static function getInstance()
+    {
+        if (static::$factoryInstance == null) {
+            static::$factoryInstance = new static();
+        }
+        return static::$factoryInstance;
+    }
 
     public function setConfig($config)
     {

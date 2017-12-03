@@ -35,6 +35,14 @@ abstract class AbstractResourceTest extends BaseTest
         ]
     ];
 
+    /**
+     * @var Mapper
+     */
+    protected $_mapperMock;
+
+    
+    protected $_resource;
+
 
     protected function setUp()
     {
@@ -45,7 +53,13 @@ abstract class AbstractResourceTest extends BaseTest
         $this->_client = $this->getMockBuilder('Forestsoft\Billomat\Client\IClient')->getMock();
         $this->clientFactory = $this->getMockBuilder('Forestsoft\Billomat\Factory\IClient')->getMock();
         $this->_resourceFactory = $this->getMockBuilder('Forestsoft\Billomat\Factory\ICustomer')->getMock();
+        $this->_resource = $this->getMockBuilder('Forestsoft\Billomat\Customer\ICustomer')->getMock();
+        $this->_resourceFactory->expects($this->any())->method("create")->willReturn($this->_resource);
 
+        $this->_mapperMock = $this->getMockBuilder('Forestsoft\Billomat\Mapper\IResourceMapper')->getMock();
+
+
+        $this->_object->setMapper($this->_mapperMock);
         $this->_object->setClientFactory($this->clientFactory);
 
         \Forestsoft\Billomat\Factory\Customer::setFactoryInstance($this->_resourceFactory);

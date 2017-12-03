@@ -89,4 +89,10 @@ interface IResource
      */
     public function setClientFactory(\Forestsoft\Billomat\Factory\IClient $client);
 
+    /**
+     * @param Mapper\IResourceMapper $mapper
+     * @return mixed
+     */
+    public function setMapper(\Forestsoft\Billomat\Mapper\IResourceMapper $mapper);
+
 }

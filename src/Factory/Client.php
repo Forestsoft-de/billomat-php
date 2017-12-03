@@ -19,6 +19,8 @@ class Client extends AbstractFactory implements IClient, IFactory
      */
     private static $instance = null;
 
+    protected static $factoryInstance = null;
+
     /**
      * @param string $uri
      * @param array $config
@@ -68,17 +70,6 @@ class Client extends AbstractFactory implements IClient, IFactory
                 $client->setMethod(Request::METHOD_GET);
         }
 
-    }
-
-    /**
-     * @return IFactory
-     */
-    public static function getInstance()
-    {
-        if (self::$factoryInstance == null) {
-            self::$factoryInstance = new self();
-        }
-        return self::$factoryInstance;
     }
 
     /**

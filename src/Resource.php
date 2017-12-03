@@ -10,6 +10,7 @@ namespace Forestsoft\Billomat;
 
 
 use Forestsoft\Billomat\Customer\ICustomer;
+use Forestsoft\Billomat\Mapper\Mapper;
 use PHPUnit\Runner\Exception;
 use Zend\Http\Client;
 
@@ -32,6 +33,11 @@ abstract class Resource implements IResource
      * @var
      */
     private $_clientFactory;
+
+    /**
+     * @var Mapper
+     */
+    private $_mapper;
 
     /**
      * @param string $key
@@ -93,6 +99,27 @@ abstract class Resource implements IResource
         $this->_language = $language;
         return $this;
     }
+
+
+    public function setMapper(\Forestsoft\Billomat\Mapper\IResourceMapper $mapper)
+    {
+        $this->_mapper = $mapper;
+        return $this;
+    }
+
+    /**
+     * @return Mapper
+     */
+    protected function createMapper()
+    {
+        return $this->_mapper;
+    }
+
+    public function __construct()
+    {
+        $this->_mapper = new Mapper();
+    }
+
 
     /**
      * @return Factory\IClient
