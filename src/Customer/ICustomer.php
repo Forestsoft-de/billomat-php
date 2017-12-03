@@ -681,4 +681,9 @@ interface ICustomer extends IResource
      * @return mixed
      */
     public function findBy($array);
+
+    /**
+     * @return ICustomer
+     */
+    public function createResource();
 }

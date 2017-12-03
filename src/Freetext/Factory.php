@@ -23,10 +23,10 @@
  * Created by PhpStorm.
  * User: Forest
  * Date: 03-Dec-17
- * Time: 07:58
+ * Time: 20:04
  */
 
-namespace Forestsoft\Billomat\Mapper;
+namespace Forestsoft\Billomat\Freetext;
 
 
 use Forestsoft\Billomat\Factory\AbstractFactory;
@@ -34,11 +34,17 @@ use Forestsoft\Billomat\Factory\IFactory;
 
 class Factory extends AbstractFactory implements IFactory
 {
-    protected static $factoryInstance = null;
 
+    protected static $factoryInstance;
+    
+    /**
+     * @return mixed
+     */
     public function create()
     {
-        $mapper = new Mapper();
-        return $mapper;
+        $rec = new Freetext();
+        $this->populateSettings($rec);
+
+        return $rec;
     }
 }

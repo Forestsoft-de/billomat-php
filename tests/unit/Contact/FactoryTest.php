@@ -23,22 +23,25 @@
  * Created by PhpStorm.
  * User: Forest
  * Date: 03-Dec-17
- * Time: 07:58
+ * Time: 13:37
  */
 
-namespace Forestsoft\Billomat\Mapper;
+namespace Forestsoft\Billomat\Test\Contact;
 
+use Forestsoft\Billomat\Contact\Factory;
+use Forestsoft\Billomat\Test\AbstractFactoryResourceTest;
+use Forestsoft\Billomat\Test\AbstractFactoryTest;
+use PHPUnit\Framework\TestCase;
 
-use Forestsoft\Billomat\Factory\AbstractFactory;
-use Forestsoft\Billomat\Factory\IFactory;
-
-class Factory extends AbstractFactory implements IFactory
+class FactoryTest extends AbstractFactoryResourceTest
 {
-    protected static $factoryInstance = null;
-
-    public function create()
+    protected function getResourceInterface()
     {
-        $mapper = new Mapper();
-        return $mapper;
+       return 'Forestsoft\Billomat\Contact\IContact';
+    }
+
+    protected function getObject()
+    {
+        return new Factory();
     }
 }

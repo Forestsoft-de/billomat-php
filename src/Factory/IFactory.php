@@ -17,6 +17,9 @@ interface IFactory
      */
     public static function getInstance();
 
-    
+    /**
+     * @return mixed
+     */
+    public function create();
 
 }

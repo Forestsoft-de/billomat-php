@@ -6,25 +6,20 @@
  * Time: 15:13
  */
 
-namespace Forestsoft\Billomat;
+namespace Forestsoft\Billomat\Invoice;
 
-use Forestsoft\Billomat\Invoice\Invoice;
-use Forestsoft\Billomat\Invoice\ISupplyDate;
-use Forestsoft\Billomat\IResource;
-use Forestsoft\Billomat\Invoice\IInvoice;
+use Forestsoft\Billomat\AbstractResourceTest;
+use Forestsoft\Billomat\Datasets\InvoiceDataset;
+use Forestsoft\Billomat\IPrice;
 use Forestsoft\Billomat\Payment\IPayment;
+use Forestsoft\Billomat\TestHelper;
 use Zend\Stdlib\ArrayObject;
 
 class InvoiceTest extends AbstractResourceTest
 {
-    /**
-     * @var Invoice
-     */
-    protected $_object;
-
-    public function setUp()
+    protected function getObject()
     {
-        $this->_object = new Invoice();
+       return new Invoice();
     }
 
     /**
@@ -43,7 +38,67 @@ class InvoiceTest extends AbstractResourceTest
         $this->assertInstanceOf('Forestsoft\Billomat\Invoice\IInvoice', $this->_object);
     }
 
-   
+    /**
+     * @dataProvider dp_invoices
+     */
+    public function testcreate($expectedRequest, $data, $response)
+    {
+        $this->assertCreateWorks("invoices", $data, $expectedRequest, $response);
+    }
+
+    public function dp_invoices()
+    {
+        return [
+            "Sebastian Förster" => [
+                "expectedRequest" => [
+                    "invoice" => InvoiceDataset::getRequest()
+                ],
+                "invoice" => InvoiceDataset::getRequest(),
+                "response" => [
+                    "invoice" => InvoiceDataset::getRequest()
+                ]
+            ],
+        ];
+    }
+
+    /**
+     * @param string $property
+     * @param string $expectedInterface
+     * 
+     * @dataProvider dp_dependencies
+     */
+    public function testCreateDependencyAutomatic($property, $expectedInterface)
+    {
+        $getter = "get" .ucfirst($property);
+        $actual = call_user_func([$this->_object, $getter]);
+        $this->assertInstanceOf($expectedInterface, $actual);
+
+        $this->assertNull($actual->getId());
+    }
+
+    public function dp_dependencies()
+    {
+      return [
+            "Client" => ["client", "Forestsoft\Billomat\Customer\ICustomer",],
+            "contact" => ["contact", "Forestsoft\Billomat\Contact\IContact"],
+            "invoice" => ["invoice", "Forestsoft\Billomat\Invoice\IInvoice"],
+            "confirmation" => ["confirmation", "Forestsoft\Billomat\Confirmation\IConfirmation"],
+            "recurring" => ["recurring", "Forestsoft\Billomat\Recurring\IRecurring"],
+            "freetext" => ["freetext", "Forestsoft\Billomat\Freetext\IFreetext"],
+            "template" => ["template", "Forestsoft\Billomat\Template\ITemplate"],
+      ];
+    }
+
+    public function getResourceInterfaceName()
+    {
+        return 'Forestsoft\Billomat\Invoice\IInvoice';
+    }
+
+
+    public function getResourceFactoryInterfaceName()
+    {
+        return 'Forestsoft\Billomat\Factory\IFactory';
+    }
 
     /**
      * @group unit

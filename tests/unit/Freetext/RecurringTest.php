@@ -23,22 +23,31 @@
  * Created by PhpStorm.
  * User: Forest
  * Date: 03-Dec-17
- * Time: 07:58
+ * Time: 19:59
  */
 
-namespace Forestsoft\Billomat\Mapper;
+namespace Forestsoft\Billomat\Test\Freetext;
 
 
-use Forestsoft\Billomat\Factory\AbstractFactory;
-use Forestsoft\Billomat\Factory\IFactory;
+use Forestsoft\Billomat\AbstractResourceTest;
+use Forestsoft\Billomat\Freetext\Freetext;
 
-class Factory extends AbstractFactory implements IFactory
+class FreetextTest extends AbstractResourceTest
 {
-    protected static $factoryInstance = null;
-
-    public function create()
+    /**
+     * @return mixed
+     */
+    public function getResourceInterfaceName()
     {
-        $mapper = new Mapper();
-        return $mapper;
+        return 'Forestsoft\Billomat\Freetext\IFreetext';
     }
+
+    /**
+     * @return mixed
+     */
+    protected function getObject()
+    {
+        return new Freetext();
+    }
+
 }

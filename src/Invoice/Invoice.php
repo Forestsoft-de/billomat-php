@@ -12,10 +12,12 @@ namespace Forestsoft\Billomat\Invoice;
 use Forestsoft\Billomat\Confirmation\IConfirmation;
 use Forestsoft\Billomat\Contact\IContact;
 use Forestsoft\Billomat\Customer\ICustomer;
+use Forestsoft\Billomat\Factory\IFactory;
 use Forestsoft\Billomat\Freetext\IFreetext;
 use Forestsoft\Billomat\IPrice;
 use Forestsoft\Billomat\IResource;
 use Forestsoft\Billomat\Offer\IOffer;
+use Forestsoft\Billomat\Payment\IPayment;
 use Forestsoft\Billomat\Resource;
 use Forestsoft\Billomat\Template\ITemplate;
 
@@ -156,9 +158,102 @@ class Invoice extends Resource implements IResource, IInvoice
     protected $template;
 
     /**
+     * @var int
+     */
+    protected $id;
+
+    /**
+     * Invoice constructor.
+     * @param ICustomer $client
+     * @param IContact $contact
+     * @param IOffer $offer
+     * @param IFreetext $freetext
+     * @param IConfirmation $confirmation
+     * @param ITemplate $template
+     * @param IRecurring $recurring
+     * @param IInvoiceItem[] $items
+     */
+    public function __construct(
+        ICustomer $client = null,
+        IContact $contact = null,
+        IOffer $offer = null,
+        IFreetext $freetext = null,
+        IConfirmation $confirmation = null,
+        ITemplate $template = null,
+        IRecurring $recurring = null,
+        IInvoice $invoice = null,
+        array $items = null)
+    {
+        $this->client =       $this->_createOrSet($client, "Forestsoft\Billomat\Factory\Customer");
+        $this->contact =      $this->_createOrSet($contact, "Forestsoft\Billomat\Contact\Factory");
+        $this->offer =        $this->_createOrSet($offer, "Forestsoft\Billomat\Offer\Factory");
+        $this->freetext =     $this->_createOrSet($freetext, "Forestsoft\Billomat\Freetext\Factory");
+        $this->confirmation = $this->_createOrSet($confirmation, "Forestsoft\Billomat\Confirmation\Factory");
+        $this->template =     $this->_createOrSet($template, "Forestsoft\Billomat\Template\Factory");
+        $this->recurring =    $this->_createOrSet($recurring, "Forestsoft\Billomat\Recurring\Factory");
+        $this->invoice =      $invoice; //prevent loop
+        $this->items =        $items;
+    }
+
+    /**
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param int $id
+     * @return Invoice
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+        return $this;
+    }
+
+    /**
+     * @return IRecurring
+     */
+    public function getRecurring()
+    {
+        return $this->recurring;
+    }
+
+    /**
+     * @param IRecurring $recurring
+     * @return Invoice
+     */
+    public function setRecurring($recurring)
+    {
+        $this->recurring = $recurring;
+        return $this;
+    }
+
+    /**
+     * @var IRecurring
+     */
+    protected $recurring;
+
+    /**
      * @var IInvoiceItem[]
      */
     protected $items;
+
+
+
+    public function getResourceName()
+    {
+        return "invoices";
+    }
+
+    public function createResource()
+    {
+        $factory = Factory::getInstance();
+        $invoice = $factory->create();
+        return $invoice;
+    }
 
     /**
      * @param int $limit
@@ -171,12 +266,48 @@ class Invoice extends Resource implements IResource, IInvoice
 
     }
 
+    protected function prepareData()
+    {
+        return [
+            "invoice" => [
+                "client_id" => $this->getClient()->getId(),
+                "contact_id" => $this->getContact()->getId(),
+                "address" => "",
+                "number_pre" => "",
+                "number" => "",
+                "number_length" => "",
+                "date" => date("Y-m-d"),
+                "supply_date" => date("Y-m-d"),
+                "supply_date_type" => ISupplyDate::DELIVERY_DATE,
+                "due_date" => date("Y-m-d"),
+                "discount_rate" => "",
+                "discount_date" => date("Y-m-d"),
+                "title" => "",
+                "label" => "",
+                "intro" => "",
+                "note" => "",
+                "reduction" => "",
+                "currency_code" => "",
+                "net_gross" => IPrice::BASE_SETTINGS,
+                "quote" => "",
+                "payment_types" => [IPayment::TYPE_BANK_TRANSFER],
+                "invoice_id" => $this->getInvoice()->getId(),
+                "offer_id" => $this->getOffer()->getId(),
+                "confirmation_id" => $this->getConfirmation()->getId(),
+                "recurring_id" => $this->getRecurring()->getId(),
+                "free_text_id" => $this->getFreetext()->getId(),
+                "template_id" => $this->getTemplate()->getId(),
+            ]
+        ];
+    }
+
+
     /**
      *
      */
     public function create()
     {
-        // TODO: Implement create() method.
+        return $this->performCrUpAction("create");
     }
 
     public function update()
@@ -602,6 +733,9 @@ class Invoice extends Resource implements IResource, IInvoice
      */
     public function getInvoice()
     {
+        if ($this->invoice === null) {
+            $this->invoice = $this->_createOrSet(null, "Forestsoft\Billomat\Invoice\Factory");
+        }
         return $this->invoice;
     }
 
@@ -727,5 +861,19 @@ class Invoice extends Resource implements IResource, IInvoice
         if (!in_array($value, $constants)) {
             throw new \InvalidArgumentException(sprintf("%s is not a valid %s. Please use one of %s::*", $value, $propertyName, $interfaceName));
         }
+    }
+
+    private function _createOrSet($object, $factory)
+    {
+        if (!$object) {
+            $factoryMethod = [$factory, "getInstance"];
+            if (is_callable($factoryMethod)) {
+                $factoryInstance =  call_user_func($factoryMethod);
+                if ($factoryInstance instanceof IFactory) {
+                    return $factoryInstance->create();
+                }
+            }
+        }
+        return $object;
     }
 }

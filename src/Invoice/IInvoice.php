@@ -27,4 +27,9 @@ interface IInvoice
      * @return Invoice[]
      */
     public function findBy($array);
+
+    /**
+     * @return IInvoice
+     */
+    public function createResource();
 }

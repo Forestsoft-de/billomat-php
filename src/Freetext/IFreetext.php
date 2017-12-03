@@ -9,7 +9,7 @@
 namespace Forestsoft\Billomat\Freetext;
 
 
-class IFreetext
+interface IFreetext
 {
 
 }

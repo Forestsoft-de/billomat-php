@@ -10,6 +10,7 @@ namespace Forestsoft\Billomat;
 
 
 use Forestsoft\Billomat\Customer\ICustomer;
+use Forestsoft\Billomat\Mapper\Factory;
 use Forestsoft\Billomat\Mapper\Mapper;
 use PHPUnit\Runner\Exception;
 use Zend\Http\Client;
@@ -117,7 +118,7 @@ abstract class Resource implements IResource
 
     public function __construct()
     {
-        $this->_mapper = new Mapper();
+        $this->_mapper = Factory::getInstance()->create();
     }
 
 
@@ -169,4 +170,38 @@ abstract class Resource implements IResource
                 break;
         }
     }
+
+    /**
+     * @param $action
+     * @return mixed
+     */
+    protected function performCrUpAction($action)
+    {
+        if ($action === "update") {
+            $action = $this->getId() . "/" . $action;
+        }
+        
+        $client = $this->getClientFactory()->create($this->getResourceName() . "/" . $action, $this->getOptions());
+        $data = $this->prepareData();
+        $customerResponse = $client->request($data);
+        $customer = $this->createResource();
+
+        $index = $this->getSingularResource();
+
+        if (in_array($client->getResponse()->getStatusCode(), [200,201])) {
+            if (!empty($customerResponse[$index])) {
+                $mapper = $this->createMapper();
+                $mapper->map($customer, new \ArrayObject($customerResponse[$index]));
+            }
+        }
+
+        return $customer;
+    }
+
+    protected function getSingularResource()
+    {
+        return substr($this->getResourceName(), 0, strlen($this->getResourceName()) -1);
+    }
+
+    abstract protected function prepareData();
 }

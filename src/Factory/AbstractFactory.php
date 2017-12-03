@@ -10,13 +10,13 @@ namespace Forestsoft\Billomat\Factory;
 
 use Forestsoft\Billomat\IResource;
 
-abstract class AbstractFactory
+abstract class AbstractFactory implements IFactory
 {
 
 
     private $_config = [];
 
-    protected static $factoryInstance = null;
+    protected static $factoryInstance;
 
     /**
      * @param mixed $factoryInstance
@@ -53,6 +53,4 @@ abstract class AbstractFactory
             }
         }
     }
-
-
 }

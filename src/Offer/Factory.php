@@ -23,22 +23,28 @@
  * Created by PhpStorm.
  * User: Forest
  * Date: 03-Dec-17
- * Time: 07:58
+ * Time: 18:22
  */
 
-namespace Forestsoft\Billomat\Mapper;
+namespace Forestsoft\Billomat\Offer;
 
 
 use Forestsoft\Billomat\Factory\AbstractFactory;
 use Forestsoft\Billomat\Factory\IFactory;
 
-class Factory extends AbstractFactory implements IFactory
+class Factory  extends AbstractFactory implements IFactory
 {
-    protected static $factoryInstance = null;
 
+    protected static $factoryInstance;
+
+    /**
+     * @return mixed
+     */
     public function create()
     {
-        $mapper = new Mapper();
-        return $mapper;
+        $offer = new Offer();
+        $this->populateSettings($offer);
+        return $offer;
     }
+
 }

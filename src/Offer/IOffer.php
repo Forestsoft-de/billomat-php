@@ -12,4 +12,5 @@ namespace Forestsoft\Billomat\Offer;
 interface IOffer
 {
 
+    public function getId();
 }

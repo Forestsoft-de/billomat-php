@@ -23,22 +23,30 @@
  * Created by PhpStorm.
  * User: Forest
  * Date: 03-Dec-17
- * Time: 07:58
+ * Time: 20:01
  */
 
-namespace Forestsoft\Billomat\Mapper;
+namespace Forestsoft\Billomat\Test\Recurring;
 
 
-use Forestsoft\Billomat\Factory\AbstractFactory;
-use Forestsoft\Billomat\Factory\IFactory;
+use Forestsoft\Billomat\Recurring\Factory;
+use Forestsoft\Billomat\Test\AbstractFactoryResourceTest;
 
-class Factory extends AbstractFactory implements IFactory
+class FactoryTest extends AbstractFactoryResourceTest
 {
-    protected static $factoryInstance = null;
-
-    public function create()
+    /**
+     * @return mixed
+     */
+    protected function getResourceInterface()
     {
-        $mapper = new Mapper();
-        return $mapper;
+        return 'Forestsoft\Billomat\Recurring\IRecurring';
+    }
+
+    /**
+     * @return mixed
+     */
+    protected function getObject()
+    {
+        return new Factory();
     }
 }

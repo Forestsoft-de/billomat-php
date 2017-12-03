@@ -1212,6 +1212,11 @@ class Customer extends Resource implements ICustomer
         return $this;
     }
 
+    public function createResource()
+    {
+        return $this->createCustomer();
+    }
+
     /**
      * @return mixed
      */
@@ -1273,7 +1278,7 @@ class Customer extends Resource implements ICustomer
     /**
      * @return array
      */
-    private function prepareData()
+    protected function prepareData()
     {
         $data = [
             "client" => [
@@ -1330,27 +1335,10 @@ class Customer extends Resource implements ICustomer
     }
 
     /**
-     * @param $action
-     * @return mixed
+     * @return string
      */
-    private function performCrUpAction($action)
+    public function getResourceName()
     {
-        if ($action === "update") {
-            $action = $this->getId() . "/" . $action;
-        }
-        $client = $this->getClientFactory()->create("clients/$action", $this->getOptions());
-        $data = $this->prepareData();
-        $customerResponse = $client->request($data);
-        $customer = $this->createCustomer();
-
-
-        if (in_array($client->getResponse()->getStatusCode(), [200,201])) {
-            if (!empty($customerResponse["client"])) {
-                $mapper = $this->createMapper();
-                $mapper->map($customer, new \ArrayObject($customerResponse["client"]));
-            }
-        }
-
-        return $customer;
+        return "clients";
     }
 }

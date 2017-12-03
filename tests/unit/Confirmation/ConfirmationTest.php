@@ -23,22 +23,31 @@
  * Created by PhpStorm.
  * User: Forest
  * Date: 03-Dec-17
- * Time: 07:58
+ * Time: 19:44
  */
 
-namespace Forestsoft\Billomat\Mapper;
+namespace Forestsoft\Billomat\Test\Confirmation;
 
 
-use Forestsoft\Billomat\Factory\AbstractFactory;
-use Forestsoft\Billomat\Factory\IFactory;
+use Forestsoft\Billomat\AbstractResourceTest;
+use Forestsoft\Billomat\Confirmation\Confirmation;
 
-class Factory extends AbstractFactory implements IFactory
+class ConfirmationTest extends AbstractResourceTest
 {
-    protected static $factoryInstance = null;
-
-    public function create()
+    /**
+     * @return mixed
+     */
+    public function getResourceInterfaceName()
     {
-        $mapper = new Mapper();
-        return $mapper;
+        return "Forestsoft\Billomat\Confirmation\IConfirmation";
     }
+
+    /**
+     * @return mixed
+     */
+    protected function getObject()
+    {
+        return new Confirmation();
+    }
+
 }

@@ -95,4 +95,13 @@ interface IResource
      */
     public function setMapper(\Forestsoft\Billomat\Mapper\IResourceMapper $mapper);
 
+    /**
+     * @return string
+     */
+    public function getResourceName();
+
+    /**
+     * @return IResource
+     */
+    public function createResource();
 }

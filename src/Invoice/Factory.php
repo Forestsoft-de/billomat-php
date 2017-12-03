@@ -23,22 +23,25 @@
  * Created by PhpStorm.
  * User: Forest
  * Date: 03-Dec-17
- * Time: 07:58
+ * Time: 10:23
  */
 
-namespace Forestsoft\Billomat\Mapper;
+namespace Forestsoft\Billomat\Invoice;
 
 
 use Forestsoft\Billomat\Factory\AbstractFactory;
-use Forestsoft\Billomat\Factory\IFactory;
 
-class Factory extends AbstractFactory implements IFactory
+class Factory extends AbstractFactory
 {
-    protected static $factoryInstance = null;
-
+    /**
+     * @return \Forestsoft\Billomat\Invoice\IInvoice
+     */
     public function create()
     {
-        $mapper = new Mapper();
-        return $mapper;
+        $invoice = new Invoice();
+
+        $this->populateSettings($invoice);
+
+        return $invoice;
     }
 }

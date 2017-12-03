@@ -9,7 +9,7 @@
 namespace Forestsoft\Billomat\Recurring;
 
 
-interface IReccurring
+interface IRecurring
 {
-
+    public function getId();
 }

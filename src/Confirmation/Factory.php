@@ -23,10 +23,10 @@
  * Created by PhpStorm.
  * User: Forest
  * Date: 03-Dec-17
- * Time: 07:58
+ * Time: 19:51
  */
 
-namespace Forestsoft\Billomat\Mapper;
+namespace Forestsoft\Billomat\Confirmation;
 
 
 use Forestsoft\Billomat\Factory\AbstractFactory;
@@ -34,11 +34,18 @@ use Forestsoft\Billomat\Factory\IFactory;
 
 class Factory extends AbstractFactory implements IFactory
 {
-    protected static $factoryInstance = null;
+    protected static $factoryInstance;
 
+    /**
+     * @return mixed
+     */
     public function create()
     {
-        $mapper = new Mapper();
-        return $mapper;
+        $confirmation = new Confirmation();
+        $this->populateSettings($confirmation);
+
+        return $confirmation;
     }
+
+
 }
