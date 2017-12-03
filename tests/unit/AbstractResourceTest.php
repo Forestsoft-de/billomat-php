@@ -43,6 +43,8 @@ abstract class AbstractResourceTest extends BaseTest
     
     protected $_resource;
 
+    protected $_responseMock;
+
 
     protected function setUp()
     {
@@ -50,14 +52,17 @@ abstract class AbstractResourceTest extends BaseTest
 
         $this->_object->setBillomatId("myBillomatId");
 
-        $this->_client = $this->getMockBuilder('Forestsoft\Billomat\Client\IClient')->getMock();
+
         $this->clientFactory = $this->getMockBuilder('Forestsoft\Billomat\Factory\IClient')->getMock();
         $this->_resourceFactory = $this->getMockBuilder('Forestsoft\Billomat\Factory\ICustomer')->getMock();
         $this->_resource = $this->getMockBuilder('Forestsoft\Billomat\Customer\ICustomer')->getMock();
         $this->_resourceFactory->expects($this->any())->method("create")->willReturn($this->_resource);
+        $this->_responseMock = $this->getMockBuilder('Zend\Http\Response')->getMock();
 
         $this->_mapperMock = $this->getMockBuilder('Forestsoft\Billomat\Mapper\IResourceMapper')->getMock();
 
+        $this->_client = $this->getMockBuilder('Forestsoft\Billomat\Client\IClient')->getMock();
+        $this->_client->expects($this->any())->method('getResponse')->willReturn($this->_responseMock);
 
         $this->_object->setMapper($this->_mapperMock);
         $this->_object->setClientFactory($this->clientFactory);
@@ -76,10 +81,16 @@ abstract class AbstractResourceTest extends BaseTest
             ->with($expectedRequest)
             ->willReturn($response);
 
-        $this->clientFactory->expects($this->once())->method("create")->with( $resource . "/create", $this->_expectedOptions)->willReturn($this->_client);
+        $this->_client->expects($this->once())->method("getResponse")->willReturn($this->_responseMock);
+        $this->_responseMock->expects($this->any())->method("getStatusCode")->willReturn(201);
 
+        $this->clientFactory->expects($this->once())->method("create")->with( $resource . "/create", $this->_expectedOptions)->willReturn($this->_client);
+        $this->_mapperMock->expects($this->once())->method('map')->with($this->_resource)->willReturn($this->_resource);
+        
         $this->_object->setClientFactory($this->clientFactory);
 
-        $this->_object->create();
+        $actual = $this->_object->create();
+
+        $this->assertSame($this->_resource, $actual);
     }
 }

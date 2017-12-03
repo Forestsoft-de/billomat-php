@@ -64,14 +64,14 @@ interface IResource
     /**
      * Create Resource
      *
-     * @return bool
+     * @return ICustomer
      */
     public function create();
 
     /**
      * Update Resource
      * 
-     * @return bool
+     * @return ICustomer
      */
     public function update();
 

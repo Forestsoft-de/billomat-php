@@ -209,7 +209,7 @@ class Customer extends Resource implements ICustomer
     }
 
     /**
-     *
+     * @return ICustomer
      */
     public function update()
     {
@@ -1344,7 +1344,7 @@ class Customer extends Resource implements ICustomer
         $customer = $this->createCustomer();
 
 
-        if ($client->getResponse()->getStatusCode() == 200) {
+        if (in_array($client->getResponse()->getStatusCode(), [200,201])) {
             if (!empty($customerResponse["client"])) {
                 $mapper = $this->createMapper();
                 $mapper->map($customer, new \ArrayObject($customerResponse["client"]));

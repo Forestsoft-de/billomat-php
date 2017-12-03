@@ -33,25 +33,27 @@ class CustomerTest extends AbstractResourceTest
         ]
     ];
 
-    public function testCreateShouldPost()
+    /**
+     * @dataProvider dp_customers
+     */
+    public function testcreate($expectedRequest, $customer, $response)
     {
-        $this->_factory->expects($this->once())->method("create")->with("clients/create", $this->_expectedOptions)->willReturn($this->_client);
-        $this->_object->create();
+        $this->assertCreateWorks("clients", $customer, $expectedRequest, $response);
     }
 
-    public function testCreateShouldReturnCustomer()
+    public function dp_customers()
     {
-        $this->_factory->expects($this->once())->method("create")->with("clients/create", $this->_expectedOptions)->willReturn($this->_client);
-        $customerResponse = ["client" => ["id" => 1010, "name" => "Luca Benakovic"]];
-        $this->_client->expects($this->once())->method("request")->willReturn($customerResponse);
-
-        $this->_responseMock->expects($this->any())->method("getStatusCode")->willReturn(200);
-
-        $this->_mapperMock->expects($this->once())->method('map')->with($this->_resource)->willReturn($this->_resource);
-
-        $actual = $this->_object->create();
-
-        $this->assertInstanceOf("Forestsoft\Billomat\Customer\ICustomer", $actual);
+        return [
+            "Sebastian Förster" => [
+                "expectedRequest" => [
+                    "client" => CustomerDataset::getCustomerRequest()
+                ],
+                "customer" => CustomerDataset::getCustomerArray(),
+                "response" => [
+                    "client" => CustomerDataset::getCustomerRequest()
+                ]
+            ],
+        ];
     }
 
     public function testfindAll()
@@ -60,7 +62,7 @@ class CustomerTest extends AbstractResourceTest
 
         $options["billomat"] = array_merge($this->_expectedOptions["billomat"], ["page" => 2, "per_page" => 10]);
 
-        $this->_factory->expects($this->once())->method("create")->with("clients", $options)->willReturn($this->_client);
+        $this->clientFactory->expects($this->once())->method("create")->with("clients", $options)->willReturn($this->_client);
 
         $list = $this->_object->findAll(10, 2);
 
@@ -143,7 +145,7 @@ class CustomerTest extends AbstractResourceTest
     {
         $this->_client->expects($this->once())->method("request")->willReturn(["client" => ["name" => "Sebastian", "id" => 1010]]);
 
-        $this->_factory->expects($this->once())->method("create")->with("clients/1010", $this->_expectedOptions)->willReturn($this->_client);
+        $this->clientFactory->expects($this->once())->method("create")->with("clients/1010", $this->_expectedOptions)->willReturn($this->_client);
         $this->_mapperMock->expects($this->once())->method('map')->with($this->_resource)->willReturn($this->_resource);
         
         $customer = $this->_object->find(1010);
@@ -173,7 +175,7 @@ class CustomerTest extends AbstractResourceTest
 
         $this->_responseMock->expects($this->any())->method("getStatusCode")->willReturn(200);
         $this->_mapperMock->expects($this->once())->method('map')->with($this->_resource)->willReturn($this->_resource);
-        $this->_factory->expects($this->once())->method("create")->with("clients/1010/update", $this->_expectedOptions)->willReturn($this->_client);
+        $this->clientFactory->expects($this->once())->method("create")->with("clients/1010/update", $this->_expectedOptions)->willReturn($this->_client);
 
         $actual = $this->_object->update();
 
@@ -189,43 +191,13 @@ class CustomerTest extends AbstractResourceTest
 
         $this->_responseMock->expects($this->any())->method("getStatusCode")->willReturn(200);
 
-        $this->_factory->expects($this->once())->method("create")->with("clients/1010/delete", $this->_expectedOptions)->willReturn($this->_client);
+        $this->clientFactory->expects($this->once())->method("create")->with("clients/1010/delete", $this->_expectedOptions)->willReturn($this->_client);
 
         $this->assertTrue($this->_object->delete());
 
     }
 
 
-    /**
-     * @dataProvider dp_customers
-     */
-    public function testcreate($expectedRequest, $customer)
-    {
-        $mapper = new Mapper();
-        $mapper->map($this->_object, new \ArrayObject($customer));
-
-        $this->_client->expects($this->once())->method("request")
-            ->with($expectedRequest)
-            ->willReturn(true);
-
-        $this->_factory->expects($this->once())->method("create")->with("clients/create", $this->_expectedOptions)->willReturn($this->_client);
-
-        $this->_object->setClientFactory($this->_factory);
-
-        $this->_object->create();
-    }
-
-    public function dp_customers()
-    {
-      return [
-        "Sebastian Förster" => [
-            "expectedRequest" => [
-                "client" => CustomerDataset::getCustomerRequest()
-            ],
-            "customer" => CustomerDataset::getCustomerArray()
-        ],
-      ];
-    }
 
     /**
      * @dataProvider dp_taxes
@@ -307,21 +279,8 @@ class CustomerTest extends AbstractResourceTest
 
     protected function setUp()
     {
-
         $this->_object = new Customer();
-
         parent::setUp(); // TODO: Change the autogenerated stub
-        
-        $this->_object->setBillomatId("myBillomatId");
-        
-        $this->_client = $this->getMockBuilder('Forestsoft\Billomat\Client\IClient')->getMock();
-
-        $this->_responseMock = $this->getMockBuilder('Zend\Http\Response')->getMock();
-        $this->_client->expects($this->any())->method("getResponse")->willReturn($this->_responseMock);
-
-        $this->_factory = $this->getMockBuilder('Forestsoft\Billomat\Factory\IClient')->getMock();
-
-        $this->_object->setClientFactory($this->_factory);
     }
 
     protected function tearDown()
@@ -342,7 +301,7 @@ class CustomerTest extends AbstractResourceTest
         $options = array_merge($search, $options);
 
         $this->_client->expects($this->once())->method("request")->willReturn($resultArray);
-        $this->_factory->expects($this->once())->method("create")->with("clients", $options)->willReturn($this->_client);
+        $this->clientFactory->expects($this->once())->method("create")->with("clients", $options)->willReturn($this->_client);
 
         $customer = $this->_object->findBy($searchArray);
         return $customer;
