@@ -34,6 +34,14 @@ class CustomerTest extends AbstractResourceTest
     ];
 
     /**
+     * @return mixed
+     */
+    public function getFactoryClassName()
+    {
+        return "Forestsoft\Billomat\Factory\Customer";
+    }
+
+    /**
      * @dataProvider dp_customers
      */
     public function testcreate($expectedRequest, $customer, $response)

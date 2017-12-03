@@ -11,5 +11,8 @@ namespace Forestsoft\Billomat\Freetext;
 
 interface IFreetext
 {
-
+    /**
+     * @return int
+     */
+    public function getId();
 }

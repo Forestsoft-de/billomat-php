@@ -23,40 +23,18 @@
  * Created by PhpStorm.
  * User: Forest
  * Date: 03-Dec-17
- * Time: 19:59
+ * Time: 20:24
  */
 
-namespace Forestsoft\Billomat\Test\Template;
+namespace Forestsoft\Billomat\Datasets;
 
 
-use Forestsoft\Billomat\AbstractResourceTest;
-use Forestsoft\Billomat\Template\Template;
+use Forestsoft\Billomat\TestHelper;
 
-class TemplateTest extends AbstractResourceTest
+class ConfirmationDataset
 {
-
-    /**
-     * @return mixed
-     */
-    public function getFactoryClassName()
-    {
-        return "Forestsoft\Billomat\Template\Factory";
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getResourceInterfaceName()
-    {
-        return 'Forestsoft\Billomat\Template\ITemplate';
-    }
-
-    /**
-     * @return mixed
-     */
-    protected function getObject()
-    {
-        return new Template();
-    }
-
+     public static function getMock()
+     {
+         return TestHelper::getMock('Forestsoft\Billomat\Confirmation\IConfirmation');
+     }
 }

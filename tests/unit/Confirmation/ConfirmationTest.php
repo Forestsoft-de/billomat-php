@@ -45,6 +45,14 @@ class ConfirmationTest extends AbstractResourceTest
     /**
      * @return mixed
      */
+    public function getFactoryClassName()
+    {
+        return "Forestsoft\Billomat\Confirmation\Factory";
+    }
+
+    /**
+     * @return mixed
+     */
     protected function getObject()
     {
         return new Confirmation();

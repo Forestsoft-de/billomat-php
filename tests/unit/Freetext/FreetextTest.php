@@ -26,13 +26,13 @@
  * Time: 19:59
  */
 
-namespace Forestsoft\Billomat\Test\Template;
+namespace Forestsoft\Billomat\Test\Freetext;
 
 
 use Forestsoft\Billomat\AbstractResourceTest;
-use Forestsoft\Billomat\Template\Template;
+use Forestsoft\Billomat\Freetext\Freetext;
 
-class TemplateTest extends AbstractResourceTest
+class FreetextTest extends AbstractResourceTest
 {
 
     /**
@@ -40,7 +40,7 @@ class TemplateTest extends AbstractResourceTest
      */
     public function getFactoryClassName()
     {
-        return "Forestsoft\Billomat\Template\Factory";
+        return "Forestsoft\Billomat\Freetext\Factory";
     }
 
     /**
@@ -48,7 +48,7 @@ class TemplateTest extends AbstractResourceTest
      */
     public function getResourceInterfaceName()
     {
-        return 'Forestsoft\Billomat\Template\ITemplate';
+        return 'Forestsoft\Billomat\Freetext\IFreetext';
     }
 
     /**
@@ -56,7 +56,7 @@ class TemplateTest extends AbstractResourceTest
      */
     protected function getObject()
     {
-        return new Template();
+        return new Freetext();
     }
 
 }

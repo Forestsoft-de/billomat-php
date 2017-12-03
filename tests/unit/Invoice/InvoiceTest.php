@@ -9,6 +9,7 @@
 namespace Forestsoft\Billomat\Invoice;
 
 use Forestsoft\Billomat\AbstractResourceTest;
+use Forestsoft\Billomat\Datasets\CustomerDataset;
 use Forestsoft\Billomat\Datasets\InvoiceDataset;
 use Forestsoft\Billomat\IPrice;
 use Forestsoft\Billomat\Payment\IPayment;
@@ -17,6 +18,14 @@ use Zend\Stdlib\ArrayObject;
 
 class InvoiceTest extends AbstractResourceTest
 {
+    /**
+     * @return mixed
+     */
+    public function getFactoryClassName()
+    {
+        return "Forestsoft\Billomat\Invoice\Factory";
+    }
+    
     protected function getObject()
     {
        return new Invoice();
@@ -53,7 +62,7 @@ class InvoiceTest extends AbstractResourceTest
                 "expectedRequest" => [
                     "invoice" => InvoiceDataset::getRequest()
                 ],
-                "invoice" => InvoiceDataset::getRequest(),
+                "invoice" => InvoiceDataset::getInvoice(),
                 "response" => [
                     "invoice" => InvoiceDataset::getRequest()
                 ]
@@ -112,7 +121,7 @@ class InvoiceTest extends AbstractResourceTest
     public function dp_gettersetter()
     {
         $contact = TestHelper::getMock("Forestsoft\Billomat\Contact\IContact");
-        $client = TestHelper::getMock("Forestsoft\Billomat\Customer\ICustomer");
+        $client = CustomerDataset::getMock();
 
         $invoice = TestHelper::getMock("Forestsoft\Billomat\Invoice\IInvoice");
         $offer = TestHelper::getMock("Forestsoft\Billomat\Offer\IOffer");

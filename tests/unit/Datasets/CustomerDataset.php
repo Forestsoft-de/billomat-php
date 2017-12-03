@@ -15,6 +15,7 @@ use Forestsoft\Billomat\Mapper\Mapper;
 use Forestsoft\Billomat\Payment\IPayment;
 use Forestsoft\Billomat\Settings\IType;
 use Forestsoft\Billomat\Tax\ITax;
+use Forestsoft\Billomat\TestHelper;
 
 class CustomerDataset
 {
@@ -136,4 +137,8 @@ class CustomerDataset
         ];
     }
 
+    public static function getMock()
+    {
+        return TestHelper::getMock('Forestsoft\Billomat\Customer\ICustomer');
+    }
 }

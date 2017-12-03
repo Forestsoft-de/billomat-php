@@ -36,6 +36,14 @@ class OfferTest extends AbstractResourceTest
     /**
      * @return mixed
      */
+    public function getFactoryClassName()
+    {
+        return "Forestsoft\Billomat\Offer\Factory";
+    }
+
+    /**
+     * @return mixed
+     */
     public function getResourceInterfaceName()
     {
         return "Forestsoft\Billomat\Offer\IOffer";

@@ -733,7 +733,7 @@ class Invoice extends Resource implements IResource, IInvoice
      */
     public function getInvoice()
     {
-        if ($this->invoice === null) {
+        if ($this->invoice == null) {
             $this->invoice = $this->_createOrSet(null, "Forestsoft\Billomat\Invoice\Factory");
         }
         return $this->invoice;

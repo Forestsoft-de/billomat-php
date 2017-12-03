@@ -35,6 +35,14 @@ use PHPUnit\Framework\TestCase;
 class ContactTest extends AbstractResourceTest
 {
 
+    /**
+     * @return mixed
+     */
+    public function getFactoryClassName()
+    {
+        return "Forestsoft\Billomat\Contact\Factory";
+    }
+    
     public function getResourceInterfaceName()
     {
         return 'Forestsoft\Billomat\Contact\IContact';

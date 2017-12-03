@@ -11,5 +11,5 @@ namespace Forestsoft\Billomat\Contact;
 
 interface IContact
 {
-
+     public function getId();
 }

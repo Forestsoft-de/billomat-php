@@ -37,6 +37,14 @@ class RecurringTest extends AbstractResourceTest
     /**
      * @return mixed
      */
+    public function getFactoryClassName()
+    {
+        return "Forestsoft\Billomat\Recurring\Factory";
+    }
+    
+    /**
+     * @return mixed
+     */
     public function getResourceInterfaceName()
     {
         return 'Forestsoft\Billomat\Recurring\IRecurring';

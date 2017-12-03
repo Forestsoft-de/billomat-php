@@ -11,5 +11,8 @@ namespace Forestsoft\Billomat\Template;
 
 interface ITemplate
 {
-
+    /**
+     * @return int
+     */
+    public function getId();
 }

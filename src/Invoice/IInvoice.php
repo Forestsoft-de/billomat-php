@@ -9,7 +9,9 @@
 namespace Forestsoft\Billomat\Invoice;
 
 
-interface IInvoice
+use Forestsoft\Billomat\IResource;
+
+interface IInvoice extends IResource
 {
     /**
      * @return IInvoice[]
@@ -32,4 +34,9 @@ interface IInvoice
      * @return IInvoice
      */
     public function createResource();
+
+    /**
+     * @return int
+     */
+    public function getId();
 }

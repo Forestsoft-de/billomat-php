@@ -23,31 +23,18 @@
  * Created by PhpStorm.
  * User: Forest
  * Date: 03-Dec-17
- * Time: 19:59
+ * Time: 20:24
  */
 
-namespace Forestsoft\Billomat\Test\Freetext;
+namespace Forestsoft\Billomat\Datasets;
 
 
-use Forestsoft\Billomat\AbstractResourceTest;
-use Forestsoft\Billomat\Freetext\Freetext;
+use Forestsoft\Billomat\TestHelper;
 
-class FreetextTest extends AbstractResourceTest
+class RecurringDataset
 {
-    /**
-     * @return mixed
-     */
-    public function getResourceInterfaceName()
-    {
-        return 'Forestsoft\Billomat\Freetext\IFreetext';
-    }
-
-    /**
-     * @return mixed
-     */
-    protected function getObject()
-    {
-        return new Freetext();
-    }
-
+     public static function getMock()
+     {
+         return TestHelper::getMock('Forestsoft\Billomat\Recurring\IRecurring');
+     }
 }
