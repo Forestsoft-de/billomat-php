@@ -82,7 +82,7 @@ class Template extends Resource implements ITemplate
      */
     public function getResourceName()
     {
-        // TODO: Implement getResourceName() method.
+        return "templates";
     }
 
     /**

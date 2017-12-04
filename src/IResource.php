@@ -116,6 +116,11 @@ interface IResource
     public function getResourceName();
 
     /**
+     * @return string
+     */
+    public function getSingularResource();
+
+    /**
      * @return IResource
      */
     public function createResource();

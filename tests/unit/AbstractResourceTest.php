@@ -160,6 +160,30 @@ abstract class AbstractResourceTest extends BaseTest
         $this->_object->setClientFactory($this->clientFactory);
     }
 
+    public function testGetResourceName()
+    {
+        $actual = $this->_object->getResourceName();
+        $this->assertNotNull($actual);
+        $actual = strtolower(str_replace("-","", $actual));
+        $expected = strtolower(basename(get_class($this->getObject())));
+        $expected = str_replace("customer", "clients", $expected);
+        $this->assertContains($expected, $actual);
+    }
+
+    /**
+     * @depends testGetResourceName
+     */
+    public function testGetSingularResource()
+    {
+        $actual = $this->_object->getSingularResource();
+        $this->assertNotNull($actual);
+        $actual = strtolower(str_replace(["-"],"", $actual));
+        $expected = strtolower(basename(get_class($this->getObject())));
+        $expected = str_replace("customer", "client", $expected);
+        $this->assertContains($expected, $actual);
+    }
+
+
     public function testCreateResource()
     {
         $this->assertInstanceOf($this->getResourceInterfaceName(), $this->_object->createResource());

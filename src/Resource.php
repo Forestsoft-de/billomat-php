@@ -277,7 +277,7 @@ abstract class Resource implements IResource
         return $client->getResponse()->getStatusCode() == 200;
     }
 
-    protected function getSingularResource()
+    public function getSingularResource()
     {
         return substr($this->getResourceName(), 0, strlen($this->getResourceName()) -1);
     }

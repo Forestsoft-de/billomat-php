@@ -67,7 +67,7 @@ class Confirmation extends Resource implements IConfirmation
      */
     public function getResourceName()
     {
-        // TODO: Implement getResourceName() method.
+        return 'confirmations';
     }
 
     /**

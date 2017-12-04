@@ -19,40 +19,15 @@
  *
  */
 
-
-
-namespace Forestsoft\Billomat\Freetext;
+namespace Forestsoft\Billomat\Article;
 
 
 use Forestsoft\Billomat\ICustomer;
 use Forestsoft\Billomat\IResource;
 use Forestsoft\Billomat\Resource;
 
-class Freetext extends Resource implements IFreetext
+class Article extends Resource implements IArticle
 {
-    /**
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * @param int $id
-     * @return Freetext
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-        return $this;
-    }
-
-    /**
-     * @var int
-     */
-    protected $id;
-
     /**
      * @return mixed
      */
@@ -82,7 +57,7 @@ class Freetext extends Resource implements IFreetext
      */
     public function getResourceName()
     {
-        return "free-texts";
+        return 'articles';
     }
 
     /**

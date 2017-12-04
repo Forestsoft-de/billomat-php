@@ -19,77 +19,35 @@
  *
  */
 
+namespace Forestsoft\Billomat\Test\Article;
 
+use Forestsoft\Billomat\AbstractResourceTest;
+use Forestsoft\Billomat\Article\Article;
+use PHPUnit\Framework\TestCase;
 
-namespace Forestsoft\Billomat\Offer;
-
-
-use Forestsoft\Billomat\ICustomer;
-use Forestsoft\Billomat\IResource;
-use Forestsoft\Billomat\Resource;
-
-class Offer extends Resource implements IOffer
+class ArticleTest extends AbstractResourceTest
 {
     /**
-     * @var int
-     */
-    protected $id;
-
-    /**
      * @return mixed
      */
-    public function getId()
+    public function getResourceInterfaceName()
     {
-        return $this->id;
+        return "Forestsoft\Billomat\Article\IArticle";
     }
 
     /**
      * @return mixed
      */
-    public function create()
+    public function getFactoryClassName()
     {
-        // TODO: Implement create() method.
+        return "Forestsoft\Billomat\Article\Factory";
     }
 
     /**
      * @return mixed
      */
-    public function update()
+    protected function getObject()
     {
-        // TODO: Implement update() method.
+        return new Article();
     }
-
-    /**
-     * @return mixed
-     */
-    public function delete()
-    {
-        // TODO: Implement delete() method.
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getResourceName()
-    {
-        return "offers";
-    }
-
-    /**
-     * @return mixed
-     */
-    public function createResource()
-    {
-        return Factory::getInstance()->create();
-    }
-
-    /**
-     * @return mixed
-     */
-    protected function prepareData()
-    {
-        // TODO: Implement prepareData() method.
-    }
-
-
 }

@@ -82,7 +82,7 @@ class Recurring extends Resource implements IRecurring
      */
     public function getResourceName()
     {
-        // TODO: Implement getResourceName() method.
+        return "recurrings";
     }
 
     /**
