@@ -25,10 +25,42 @@ namespace Forestsoft\Billomat\Test\Contact;
 
 use Forestsoft\Billomat\AbstractResourceTest;
 use Forestsoft\Billomat\Contact\Contact;
+use Forestsoft\Billomat\Datasets\ContactDataset;
+use Forestsoft\Billomat\Datasets\CustomerDataset;
 use PHPUnit\Framework\TestCase;
 
 class ContactTest extends AbstractResourceTest
 {
+
+    /**
+     * @var Contact
+     */
+    protected $_object;
+
+    /**
+     *
+     */
+    public function testfindAll()
+    {
+        $this->_expectedOptions["billomat"] = array_merge($this->_expectedOptions["billomat"], ["page" => 2, "per_page" => 10, "client_id" => 1010]);
+
+        $this->_prepareRequest("contacts", [], [], ["contacts" => ["contact" => [ContactDataset::getArray()]] ], 200);
+        $this->_object->setCustomer(CustomerDataset::getCustomer());
+        
+        $contacts = $this->_object->findAll(10, 2);
+
+        $this->assertInternalType('array', $contacts);
+        $this->assertContainsOnly('Forestsoft\Billomat\Contact\IContact', $contacts);
+    }
+
+    /**
+     * @group unit
+     */
+    public function testfindallThrowExpectionIfCustomerIsNotSet()
+    {
+        $this->expectExceptionObject(new \InvalidArgumentException("Cannot find contacts because Customer is not set"));
+        $this->_object->findAll(1,1);
+    }
 
     /**
      * @return mixed

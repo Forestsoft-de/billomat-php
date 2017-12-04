@@ -123,6 +123,14 @@ class ClientTest extends TestCase
                 "expectedMethod" => Request::METHOD_GET,
                 "expectedQuery" => array_merge($defaultQuery, ["first_name" => "Sebastian"])
             ],
+            "Find Contact by Client" => [
+                "expectedUri" => "https://" . self::$billoMatId . ".billomat.net/api/contacts?format=json&client_id=1010",
+                "expectedOptions" => ['maxredirects' => 1, 'timeout' => 30],
+                "uri" => "contacts?format=json&client_id=1010",
+                "options" => ['maxredirects' => 1, 'timeout' => 30, 'billomat' => ["billomatId" => self::$billoMatId, "client_id" => 1010]],
+                "expectedMethod" => Request::METHOD_GET,
+                "expectedQuery" => array_merge($defaultQuery, ["client_id" => 1010])
+            ],
             "Avatar Request" => [
                 "expectedUri" => "https://" . self::$billoMatId . ".billomat.net/api/clients/10/avatar?size=150",
                 "expectedOptions" => ['maxredirects' => 1, 'timeout' => 30],

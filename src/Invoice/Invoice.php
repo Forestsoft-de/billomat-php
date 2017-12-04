@@ -283,10 +283,16 @@ class Invoice extends Resource implements IResource, IInvoice
 
     protected function prepareData()
     {
+        $invoice = [];
+        
+        if ($this->getContact()->getId()) {
+            $invoice["contact_id"] = $this->getContact()->getId();
+        };
+
         return [
-            "invoice" => [
+            "invoice" => array_merge(
+                [
                 "client_id" => $this->getClient()->getId(),
-                "contact_id" => $this->getContact()->getId(),
                 "address" => "",
                 "number_pre" => "",
                 "number" => "",
@@ -303,7 +309,7 @@ class Invoice extends Resource implements IResource, IInvoice
                 "note" => "",
                 "reduction" => "",
                 "currency_code" => "",
-                "net_gross" => IPrice::BASE_SETTINGS,
+                "net_gross" => IPrice::BASE_GROSS,
                 "quote" => "",
                 "payment_types" => [IPayment::TYPE_BANK_TRANSFER],
                 "invoice_id" => $this->getInvoice()->getId(),
@@ -311,8 +317,10 @@ class Invoice extends Resource implements IResource, IInvoice
                 "confirmation_id" => $this->getConfirmation()->getId(),
                 "recurring_id" => $this->getRecurring()->getId(),
                 "free_text_id" => $this->getFreetext()->getId(),
-                "template_id" => $this->getTemplate()->getId(),
-            ]
+                "template_id" => $this->getTemplate()->getId()
+                ],
+                $invoice
+            )
         ];
     }
 

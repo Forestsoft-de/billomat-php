@@ -128,6 +128,9 @@ abstract class Resource implements IResource
      */
     protected function createMapper()
     {
+        if ($this->_mapper === null) {
+            $this->_mapper = Factory::getInstance()->create();
+        }
         return $this->_mapper;
     }
 
@@ -160,10 +163,6 @@ abstract class Resource implements IResource
             "billomat" => [
                 "billomatId" => $this->_billomatId,
                 "apiKey" => $this->_apikey,
-//                "language" => $this->_language,
-//                "page" => $this->_page,
-//                "per_page" => $this->_perPage,
-//                "order" => $this->_order,
             ]
         ];
 
@@ -236,6 +235,35 @@ abstract class Resource implements IResource
         foreach ($array as $key => $value) {
             $this->validateInterface("Forestsoft\Billomat\\" . ucfirst($this->getSingularResource()) . "\ISearch", $key, "search");
         }
+    }
+
+    protected function _performFindRequest($limit, $start, $options = [])
+    {
+        $list = [];
+
+        $options = $this->getOptions(["billomat" => array_merge(["per_page" => $limit, "page" => $start], $options)]);
+
+        $client = $this->getClientFactory()->create($this->getResourceName(), $options);
+
+        $customers = $client->request();
+
+        $index = $this->getResourceName();
+        $indexSingular = $this->getSingularResource();
+
+        if ($client->getResponse()->getStatusCode() == 200) {
+            if (!empty($customers[$index][$indexSingular])) {
+                foreach ($customers[$index][$indexSingular] as $customers) {
+                    $customer = $this->createResource();
+
+                    $mapper = $this->createMapper();
+                    $mapper->map($customer, new \ArrayObject($customers));
+
+                    $list[] = $customer;
+                }
+
+            }
+        }
+        return $list;
     }
 
     /**

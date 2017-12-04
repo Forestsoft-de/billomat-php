@@ -52,7 +52,7 @@ class InvoiceDataset
             "note" => "",
             "reduction" => "",
             "currency_code" => "",
-            "net_gross" => IPrice::BASE_SETTINGS,
+            "net_gross" => IPrice::BASE_GROSS,
             "quote" => "",
             "payment_types" => [IPayment::TYPE_BANK_TRANSFER],
             "invoice_id" => "",

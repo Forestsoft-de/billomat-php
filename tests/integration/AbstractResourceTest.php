@@ -21,34 +21,46 @@
 
 namespace Forestsoft\Billomat\Test\Integration;
 
-use Forestsoft\Billomat\Invoice\Invoice;
 use PHPUnit\Framework\TestCase;
 
-class InvoiceTest extends AbstractResourceTest
+abstract class AbstractResourceTest extends TestCase
 {
+    /**
+     * @var \Forestsoft\Billomat\Factory\Customer
+     */
+    protected $_customerFactory;
 
     /**
-     * @var Invoice
+     * @var  \Forestsoft\Billomat\Contact\Factory
      */
-    protected $_object = null;
+    protected $_contactFactory;
+
+    /**
+     * @var \Forestsoft\Billomat\Invoice\Factory
+     */
+    private $_invoiceFactory;
+
 
     protected function setUp()
     {
-        $factory = \Forestsoft\Billomat\Invoice\Factory::getInstance();
+        $this->_customerFactory = \Forestsoft\Billomat\Factory\Customer::getInstance();
+        $this->setConfigToFactory($this->_customerFactory);
+
+        $this->_contactFactory = \Forestsoft\Billomat\Contact\Factory::getInstance();
+        $this->setConfigToFactory($this->_contactFactory);
+
+        $this->_invoiceFactory = \Forestsoft\Billomat\Invoice\Factory::getInstance();
+        $this->setConfigToFactory($this->_invoiceFactory);
+    }
+
+    /**
+     * @param $factory
+     */
+    protected function setConfigToFactory($factory)
+    {
         $config = \Forestsoft\Billomat\TestHelper::getConfig();
         $factory->setConfig(
             $config['integration']['billomat']
         );
-        $this->_object = $factory->create();
-    }
-
-    public function testcreate()
-    {
-        $customer = \Forestsoft\Billomat\Factory\Customer::getInstance()->create();
-        $customer->setId(1624078);
-
-        $this->_object->setClient($customer);
-
-        $this->_object->create();
     }
 }

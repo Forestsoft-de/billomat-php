@@ -21,34 +21,36 @@
 
 namespace Forestsoft\Billomat\Test\Integration;
 
-use Forestsoft\Billomat\Invoice\Invoice;
+use Forestsoft\Billomat\Contact\Contact;
+use Forestsoft\Billomat\Contact\Factory;
+use Forestsoft\Billomat\Factory\Customer;
 use PHPUnit\Framework\TestCase;
 
-class InvoiceTest extends AbstractResourceTest
+class ContactTest extends AbstractResourceTest
 {
 
     /**
-     * @var Invoice
+     * @var ContactTest
      */
     protected $_object = null;
 
     protected function setUp()
     {
-        $factory = \Forestsoft\Billomat\Invoice\Factory::getInstance();
-        $config = \Forestsoft\Billomat\TestHelper::getConfig();
-        $factory->setConfig(
-            $config['integration']['billomat']
-        );
-        $this->_object = $factory->create();
+        parent::setUp();
+        $this->_object = $this->_contactFactory->create();
     }
 
-    public function testcreate()
+    /**
+     * @group unit
+     */
+    public function testFindAll()
     {
-        $customer = \Forestsoft\Billomat\Factory\Customer::getInstance()->create();
-        $customer->setId(1624078);
+        $customer = $this->_customerFactory->create();
+        $customer = $customer->find(563795);
 
-        $this->_object->setClient($customer);
-
-        $this->_object->create();
+        $this->_object->setCustomer($customer);
+        
+        $actual = $this->_object->findAll(100, 1);
+        $this->assertContainsOnly('Forestsoft\Billomat\Contact\IContact', $actual);
     }
 }

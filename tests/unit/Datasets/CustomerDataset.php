@@ -112,6 +112,7 @@ class CustomerDataset
     public static function getCustomerArray()
     {
         return [
+            "id" => 1010,
             'archived' => true,
             'numberPre' => "CUS",
             'number' => 1050,

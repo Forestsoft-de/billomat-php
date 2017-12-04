@@ -24,7 +24,26 @@
 namespace Forestsoft\Billomat\Contact;
 
 
-interface IContact
+use Forestsoft\Billomat\Customer\ICustomer;
+use Forestsoft\Billomat\IResource;
+
+interface IContact extends IResource
 {
+    /**
+     * @return int
+     */
      public function getId();
+
+    /**
+     * @return IContact[]
+     */
+    public function findAll($limit = 10, $start = 1);
+
+    /**
+     * @param ICustomer $customer
+     * @return IContact
+     */
+    public function setCustomer(ICustomer $customer);
+
+     
 }

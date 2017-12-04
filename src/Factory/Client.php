@@ -143,7 +143,7 @@ class Client extends AbstractFactory implements IClient, IFactory
     private function populateQuery($config, $client)
     {
 
-        $possibleKeys = ["page", "order_by", "per_page", "language"];
+        $possibleKeys = ["page", "order_by", "per_page", "language", "client_id"];
 
         $client->getRequest()->getQuery()->set("format", $config['billomat']['format']);
         $client->getRequest()->getQuery()->set("api_key", $config['billomat']['apiKey']);

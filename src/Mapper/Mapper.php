@@ -36,6 +36,23 @@ class Mapper implements IResourceMapper
             $setter = "set" . $this->camelCasing($key);
 
             if (is_callable(array($resource, $setter))) {
+                try {
+                    $r = new \ReflectionMethod($resource, $setter);
+                    $params = $r->getParameters();
+                    /** @var \ReflectionParameter $info */
+                    $info = $params[0];
+                    if ($info->isArray() && !is_array($value)) {
+                        if (stristr($value, ",")) {
+                            $value = explode(",", $value);
+                        } else {
+                            $value = [$value];
+                        }
+                    } elseif ($info->hasType()) {
+                        $value = $this->_mapType($info, $value);
+                    }
+                } catch (Exception $e) {
+                }
+
                 call_user_func([$resource, $setter], $value);
             }
         }
@@ -45,5 +62,23 @@ class Mapper implements IResourceMapper
     {
         $key = ucwords($key, "_");
         return str_replace("_", "", $key);
+    }
+
+    /**
+     * @param \ReflectionParameter $getType
+     * @param mixed $value
+     * 
+     * @return mixed
+     */
+    private function _mapType($param, $value)
+    {
+        $typeName = $param->getClass();
+        
+        switch ($typeName) {
+
+            default:
+                return $value;
+        }
+
     }
 }

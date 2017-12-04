@@ -32,4 +32,11 @@ class ContactDataset
      {
          return TestHelper::getMock('Forestsoft\Billomat\Contact\IContact');
      }
+
+    public static function getArray()
+    {
+        return [
+                
+        ];
+    }
 }

@@ -24,7 +24,7 @@
 use Forestsoft\Billomat\Customer\Customer;
 use PHPUnit\Framework\TestCase;
 
-class CustomerTest extends TestCase
+class CustomerTest extends \Forestsoft\Billomat\Test\Integration\AbstractResourceTest
 {
 
     /**
