@@ -213,6 +213,42 @@ abstract class Resource implements IResource
         return $customer;
     }
 
+    /**
+     * @param $interfaceName
+     * @param $value
+     * @param $propertyName
+     */
+    protected function validateInterface($interfaceName, $value, $propertyName)
+    {
+        $oClass = new \ReflectionClass($interfaceName);
+        $constants =  $oClass->getConstants();
+
+        if (!in_array($value, $constants)) {
+            throw new \InvalidArgumentException(sprintf("%s is not a valid %s. Please use one of %s::*", $value, $propertyName, $interfaceName));
+        }
+    }
+
+    /**
+     * @param $array
+     */
+    protected function validateSearch($array)
+    {
+        foreach ($array as $key => $value) {
+            $this->validateInterface("Forestsoft\Billomat\\" . ucfirst($this->getSingularResource()) . "\ISearch", $key, "search");
+        }
+    }
+
+    /**
+     * @return bool
+     */
+    protected function performDelete()
+    {
+        $client = $this->getClientFactory()->create($this->getResourceName() . "/" . $this->getId() . "/delete", $this->getOptions());
+        $client->request();
+
+        return $client->getResponse()->getStatusCode() == 200;
+    }
+
     protected function getSingularResource()
     {
         return substr($this->getResourceName(), 0, strlen($this->getResourceName()) -1);

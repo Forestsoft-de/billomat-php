@@ -254,10 +254,7 @@ class Customer extends Resource implements ICustomer
      */
     public function delete()
     {
-        $client = $this->getClientFactory()->create("clients/" . $this->getId() . "/delete", $this->getOptions());
-        $client->request();
-
-        return $client->getResponse()->getStatusCode() == 200;
+        return $this->performDelete();
     }
 
     /**
@@ -308,6 +305,45 @@ class Customer extends Resource implements ICustomer
             }
         }
         return $list;
+    }
+
+    public function findBy($array)
+    {
+        $this->validateSearch($array);
+
+        $search  = ["search" => $array];
+
+        $options = array_merge($search, $this->getOptions());
+
+        $client = $this->getClientFactory()->create("clients", $options);
+
+        $customerResponse = $client->request();
+
+        $customers = [];
+
+        if ($client->getResponse()->getStatusCode() == 200) {
+            if (!empty($customerResponse["clients"]["client"])) {
+                foreach ($customerResponse["clients"]["client"] as $client) {
+                    $customer = $this->createCustomer();
+                    $mapper = $this->createMapper();
+                    $mapper->map($customer, new \ArrayObject($client));
+
+                    $customers[] = $customer;
+                }
+            }
+        }
+        return $customers;
+    }
+
+
+    /**
+     * @param $array
+     */
+    protected function validateSearch($array)
+    {
+        foreach ($array as $key => $value) {
+            $this->validateInterface("Forestsoft\Billomat\Customer\ISearch", $key, "search");
+        }
     }
 
     /**
@@ -1245,53 +1281,7 @@ class Customer extends Resource implements ICustomer
         return $customer;
     }
 
-    public function findBy($array)
-    {
-        $this->validateSearch($array);
-
-        $search  = ["search" => $array];
-
-        $options = array_merge($search, $this->getOptions());
-
-        $client = $this->getClientFactory()->create("clients", $options);
-
-        $customerResponse = $client->request();
-
-        $customers = [];
-
-        if ($client->getResponse()->getStatusCode() == 200) {
-            if (!empty($customerResponse["clients"]["client"])) {
-                foreach ($customerResponse["clients"]["client"] as $client) {
-                    $customer = $this->createCustomer();
-                    $mapper = $this->createMapper();
-                    $mapper->map($customer, new \ArrayObject($client));
-
-                    $customers[] = $customer;
-                }
-            }
-        }
-        return $customers;
-    }
-
-    private function validateSearch($array)
-    {
-        foreach ($array as $key => $value) {
-            switch ($key) {
-                case ISearch::PARAM_LAST_NAME:
-                case ISearch::PARAM_FIRST_NAME:
-                case ISearch::PARAM_CLIENT_NUMBER:
-                case ISearch::PARAM_EMAIL:
-                case ISearch::PARAM_NAME:
-                case ISearch::PARAM_NOTE:
-                case ISearch::PARAM_TAGS:
-                case ISearch::PARAM_COUNTRY_CODE:
-                case ISearch::PARAM_INVOICE_ID:
-                    continue;
-                default:
-                    throw new \InvalidArgumentException(sprintf("%s is not a valid search. Please see ISearch::PARAM_*", $key));
-            }
-        }
-    }
+    
 
     /**
      * @return array

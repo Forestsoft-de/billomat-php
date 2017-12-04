@@ -184,7 +184,7 @@ class CustomerTest extends AbstractResourceTest
 
     public function testFindByThrowExceptionIfSearchNotPossible()
     {
-        $this->expectExceptionObject(new \InvalidArgumentException("city is not a valid search. Please see ISearch::PARAM_*"));
+        $this->expectExceptionObject(new \InvalidArgumentException("city is not a valid search. Please use one of Forestsoft\Billomat\Customer\ISearch::*"));
         $this->_object->findBy(["city" => "Musterhausen"]);
     }
 
@@ -195,7 +195,7 @@ class CustomerTest extends AbstractResourceTest
 
     public function testDelete()
     {
-        $this->assertDeleteWorks("clients", CustomerDataset::getCustomerUpdate(), [], [], true, 200);
+        $this->assertDeleteWorks("clients", CustomerDataset::getCustomerUpdate(), true, 200);
     }
 
     /**

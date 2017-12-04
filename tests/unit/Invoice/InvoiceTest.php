@@ -63,6 +63,22 @@ class InvoiceTest extends AbstractResourceTest
     }
 
     /**
+     * @group unit
+     */
+    public function testUpdate()
+    {
+        $this->assertUpdateWorks("invoices", InvoiceDataset::getInvoice(), ["invoice" => InvoiceDataset::getRequest()], ["invoice" => InvoiceDataset::getRequest()], 200);
+    }
+
+    /**
+     * @group unit
+     */
+    public function testDelete()
+    {
+        $this->assertDeleteWorks("invoices", InvoiceDataset::getInvoice(),true, 200);
+    }
+
+    /**
      * @dataProvider dp_invoices
      */
     public function testcreate($expectedRequest, $data, $response)
@@ -111,6 +127,38 @@ class InvoiceTest extends AbstractResourceTest
             "freetext" => ["freetext", "Forestsoft\Billomat\Freetext\IFreetext"],
             "template" => ["template", "Forestsoft\Billomat\Template\ITemplate"],
       ];
+    }
+
+    public function testFindBy()
+    {
+        $invoice = $this->prepareFindBy([ISearch::PARAM_CLIENT_ID => "1010"], ["invoices" => ["invoice" => [InvoiceDataset::getInvoice()]]]);
+
+        $this->assertInternalType('array', $invoice);
+        $this->assertCount(1, $invoice);
+        $this->assertContainsOnly('Forestsoft\Billomat\Invoice\IInvoice', $invoice);
+    }
+
+    public function testFindByThrowExceptionIfSearchNotPossible()
+    {
+        $this->expectExceptionObject(new \InvalidArgumentException("city is not a valid search. Please use one of Forestsoft\Billomat\Invoice\ISearch::*"));
+        $this->_object->findBy(["city" => "Musterhausen"]);
+    }
+
+    /**
+     * @return mixed|void
+     */
+    private function prepareFindBy($searchArray, $resultArray)
+    {
+        $options = $this->_expectedOptions;
+
+        $search = ["search" => $searchArray];
+        $this->_expectedOptions = array_merge($search, $options);
+
+        $this->_prepareRequest("invoices", [], [], $resultArray, 200);
+
+        $customer = $this->_object->findBy($searchArray);
+
+        return $customer;
     }
 
     public function getResourceInterfaceName()

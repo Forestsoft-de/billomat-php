@@ -327,12 +327,12 @@ class Invoice extends Resource implements IResource, IInvoice
 
     public function update()
     {
-        // TODO: Implement update() method.
+        return $this->performCrUpAction("update");
     }
 
     public function delete()
     {
-        // TODO: Implement delete() method.
+        return $this->performDelete();
     }
 
     /**
@@ -350,7 +350,33 @@ class Invoice extends Resource implements IResource, IInvoice
      */
     public function findBy($array)
     {
-        // TODO: Implement findBy() method.
+        $this->validateSearch($array);
+
+        $search  = ["search" => $array];
+
+        $options = array_merge($search, $this->getOptions());
+
+        $client = $this->getClientFactory()->create($this->getResourceName(), $options);
+
+        $customerResponse = $client->request();
+
+        $customers = [];
+
+        $index = $this->getSingularResource();
+        $indexPlural = $this->getResourceName();
+        
+        if ($client->getResponse()->getStatusCode() == 200) {
+            if (!empty($customerResponse[$indexPlural][$index])) {
+                foreach ($customerResponse[$indexPlural][$index] as $client) {
+                    $customer = $this->createResource();
+                    $mapper = $this->createMapper();
+                    $mapper->map($customer, new \ArrayObject($client));
+
+                    $customers[] = $customer;
+                }
+            }
+        }
+        return $customers;
     }
 
     /**
@@ -866,16 +892,6 @@ class Invoice extends Resource implements IResource, IInvoice
     public function getItems()
     {
         return $this->items;
-    }
-
-    protected function validateInterface($interfaceName, $value, $propertyName)
-    {
-        $oClass = new \ReflectionClass($interfaceName);
-        $constants =  $oClass->getConstants();
-
-        if (!in_array($value, $constants)) {
-            throw new \InvalidArgumentException(sprintf("%s is not a valid %s. Please use one of %s::*", $value, $propertyName, $interfaceName));
-        }
     }
 
     private function _createOrSet($object, $factory)

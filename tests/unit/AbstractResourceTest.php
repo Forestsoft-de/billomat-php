@@ -103,7 +103,7 @@ abstract class AbstractResourceTest extends BaseTest
         $this->assertSame($this->_resource, $actual);
     }
 
-    public function assertDeleteWorks($resource, $data, $expectedRequest, $response, $expectedResult = true, $httpStatusCode = 200)
+    public function assertDeleteWorks($resource, $data, $expectedResult = true, $httpStatusCode = 200)
     {
         $uri = $resource;
         if (array_key_exists('id', $data)) {
@@ -112,7 +112,7 @@ abstract class AbstractResourceTest extends BaseTest
             $this->fail("No id identifier to perform delete action on resource");
         }
 
-        $this->_prepareRequest($uri, $data, $expectedRequest, $response, $httpStatusCode);
+        $this->_prepareRequest($uri, $data, [], [], $httpStatusCode);
 
         $actual = $this->_object->delete();
         $this->assertEquals($expectedResult, $actual);

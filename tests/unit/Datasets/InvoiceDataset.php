@@ -90,6 +90,7 @@ class InvoiceDataset
         return [
             "client" => $customer,
             "contact" => $contact,
+            "id" => 1020,
             "address" => "",
             "number_pre" => "",
             "number" => "",
