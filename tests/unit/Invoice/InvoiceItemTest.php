@@ -19,12 +19,7 @@
  *
  */
 
-/**
- * Created by PhpStorm.
- * User: sebastian.foerster
- * Date: 30.11.2017
- * Time: 16:53
- */
+
 namespace Forestsoft\Billomat\Invoice;
 
 use Forestsoft\Billomat\BaseTest;

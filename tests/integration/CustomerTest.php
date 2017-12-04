@@ -19,12 +19,7 @@
  *
  */
 
-/**
- * Created by PhpStorm.
- * User: Forest
- * Date: 18-Nov-17
- * Time: 17:11
- */
+
 
 use Forestsoft\Billomat\Customer\Customer;
 use PHPUnit\Framework\TestCase;

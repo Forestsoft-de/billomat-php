@@ -19,12 +19,7 @@
  *
  */
 
-/**
- * Created by PhpStorm.
- * User: Forest
- * Date: 19-Nov-17
- * Time: 10:25
- */
+
 
 namespace Forestsoft\Billomat\Mapper;
 

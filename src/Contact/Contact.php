@@ -19,12 +19,7 @@
  *
  */
 
-/**
- * Created by PhpStorm.
- * User: Forest
- * Date: 03-Dec-17
- * Time: 14:12
- */
+
 
 namespace Forestsoft\Billomat\Contact;
 

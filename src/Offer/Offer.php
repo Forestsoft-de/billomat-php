@@ -19,12 +19,7 @@
  *
  */
 
-/**
- * Created by PhpStorm.
- * User: Forest
- * Date: 03-Dec-17
- * Time: 18:43
- */
+
 
 namespace Forestsoft\Billomat\Offer;
 

@@ -19,12 +19,7 @@
  *
  */
 
-/**
- * Created by PhpStorm.
- * User: Forest
- * Date: 03-Dec-17
- * Time: 10:23
- */
+
 
 namespace Forestsoft\Billomat\Invoice;
 
