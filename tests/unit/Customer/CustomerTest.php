@@ -47,15 +47,6 @@ class CustomerTest extends AbstractResourceTest
             'apiKey' => null,
         ]
     ];
-
-    /**
-     * @return mixed
-     */
-    public function getFactoryClassName()
-    {
-        return "Forestsoft\Billomat\Factory\Customer";
-    }
-
     /**
      * @dataProvider dp_customers
      */
@@ -81,11 +72,8 @@ class CustomerTest extends AbstractResourceTest
 
     public function testfindAll()
     {
-        $this->_client->expects($this->once())->method("request")->willReturn(["clients" => ["client" => [["name" => "Sebastian"]]]]);
-
-        $options["billomat"] = array_merge($this->_expectedOptions["billomat"], ["page" => 2, "per_page" => 10]);
-
-        $this->clientFactory->expects($this->once())->method("create")->with("clients", $options)->willReturn($this->_client);
+        $this->_expectedOptions["billomat"] = array_merge($this->_expectedOptions["billomat"], ["page" => 2, "per_page" => 10]);
+        $this->_prepareRequest("clients", [], [], ["clients" => ["client" => [["name" => "Sebastian"]]]], 200);
 
         $list = $this->_object->findAll(10, 2);
 
@@ -166,23 +154,32 @@ class CustomerTest extends AbstractResourceTest
 
     public function testfind()
     {
-        $this->_client->expects($this->once())->method("request")->willReturn(["client" => ["name" => "Sebastian", "id" => 1010]]);
-
-        $this->clientFactory->expects($this->once())->method("create")->with("clients/1010", $this->_expectedOptions)->willReturn($this->_client);
-        $this->_mapperMock->expects($this->once())->method('map')->with($this->_resource)->willReturn($this->_resource);
-        
+        $this->_prepareRequest("clients/1010", CustomerDataset::getCustomerArray(), [], ["client" => CustomerDataset::getCustomerArray()], 200);
         $customer = $this->_object->find(1010);
-
         $this->assertInstanceOf('Forestsoft\Billomat\Customer\ICustomer', $customer);
     }
 
     public function testFindBy()
     {
-        $this->_mapperMock->expects($this->once())->method('map')->with($this->_resource)->willReturn($this->_resource);
-        
         $customer = $this->prepareFindBy([ISearch::PARAM_FIRST_NAME => "Luca", ISearch::PARAM_LAST_NAME => "Benakovic"], ["clients" => ["client" => [["name" => "Luca Benakovic", "id" => 1010]]]]);
-
         $this->assertContainsOnly('Forestsoft\Billomat\Customer\ICustomer', $customer);
+    }
+
+    /**
+     * @return mixed|void
+     */
+    private function prepareFindBy($searchArray, $resultArray)
+    {
+        $options = $this->_expectedOptions;
+
+        $search = ["search" => $searchArray];
+        $this->_expectedOptions = array_merge($search, $options);
+
+        $this->_prepareRequest("clients", [], [], $resultArray, 200);
+
+        $customer = $this->_object->findBy($searchArray);
+
+        return $customer;
     }
 
     public function testFindByThrowExceptionIfSearchNotPossible()
@@ -193,34 +190,13 @@ class CustomerTest extends AbstractResourceTest
 
     public function testUpdate()
     {
-        $this->_object->setId(1010);
-        $this->_client->expects($this->once(2))->method("request")->willReturn(["client" => ["name" => "Sebastian"]]);
-
-        $this->_responseMock->expects($this->any())->method("getStatusCode")->willReturn(200);
-        $this->_mapperMock->expects($this->once())->method('map')->with($this->_resource)->willReturn($this->_resource);
-        $this->clientFactory->expects($this->once())->method("create")->with("clients/1010/update", $this->_expectedOptions)->willReturn($this->_client);
-
-        $actual = $this->_object->update();
-
-        $this->assertInstanceOf("Forestsoft\Billomat\Customer\ICustomer", $actual);
-        $this->assertNotSame($this->_object, $actual);
+        $this->assertUpdateWorks("clients", CustomerDataset::getCustomerUpdate(), ["client" => CustomerDataset::getCustomerRequest()], ["client" => CustomerDataset::getCustomerArray()]);
     }
 
     public function testDelete()
     {
-        $this->_object->setId(1010);
-        
-        $this->_client->expects($this->once())->method("request")->willReturn(["clients" => ["client" => [["name" => "Sebastian"]]]]);
-
-        $this->_responseMock->expects($this->any())->method("getStatusCode")->willReturn(200);
-
-        $this->clientFactory->expects($this->once())->method("create")->with("clients/1010/delete", $this->_expectedOptions)->willReturn($this->_client);
-
-        $this->assertTrue($this->_object->delete());
-
+        $this->assertDeleteWorks("clients", CustomerDataset::getCustomerUpdate(), [], [], true, 200);
     }
-
-
 
     /**
      * @dataProvider dp_taxes
@@ -299,25 +275,6 @@ class CustomerTest extends AbstractResourceTest
         ]
       ];
     }
-        
-    /**
-     * @return mixed|void
-     */
-    private function prepareFindBy($searchArray, $resultArray)
-    {
-        $options = $this->_expectedOptions;
-
-        $search = ["search" => $searchArray];
-
-        $options = array_merge($search, $options);
-
-        $this->_client->expects($this->once())->method("request")->willReturn($resultArray);
-        $this->clientFactory->expects($this->once())->method("create")->with("clients", $options)->willReturn($this->_client);
-
-        $customer = $this->_object->findBy($searchArray);
-        return $customer;
-    }
-
     public function getResourceInterfaceName()
     {
         return 'Forestsoft\Billomat\Customer\ICustomer';
@@ -328,10 +285,17 @@ class CustomerTest extends AbstractResourceTest
         return 'Forestsoft\Billomat\Factory\IFactory';
     }
 
+    /**
+     * @return mixed
+     */
+    public function getFactoryClassName()
+    {
+        return "Forestsoft\Billomat\Factory\Customer";
+    }
+
+
     protected function getObject()
     {
         return new Customer();
     }
-
-
 }

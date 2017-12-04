@@ -88,6 +88,16 @@ class CustomerDataset
         ];
     }
 
+    public static function getCustomerUpdateRequest()
+    {
+        return ["id" => 1010] + self::getCustomerRequest();
+    }
+
+    public static function getCustomerUpdate()
+    {
+        return ["id" => 1010] + self::getCustomerArray();
+    }
+
     public static function getCustomer()
     {
         $factory = Customer::getInstance();

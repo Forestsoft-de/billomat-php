@@ -96,24 +96,68 @@ abstract class AbstractResourceTest extends BaseTest
 
     public function assertCreateWorks($resource, $data, $expectedRequest, $response)
     {
+        $this->_prepareRequest($resource . "/create", $data, $expectedRequest, $response);
+
+        $actual = $this->_object->create();
+
+        $this->assertSame($this->_resource, $actual);
+    }
+
+    public function assertDeleteWorks($resource, $data, $expectedRequest, $response, $expectedResult = true, $httpStatusCode = 200)
+    {
+        $uri = $resource;
+        if (array_key_exists('id', $data)) {
+            $uri .= "/" . $data['id'] . "/delete";
+        } else {
+            $this->fail("No id identifier to perform delete action on resource");
+        }
+
+        $this->_prepareRequest($uri, $data, $expectedRequest, $response, $httpStatusCode);
+
+        $actual = $this->_object->delete();
+        $this->assertEquals($expectedResult, $actual);
+    }
+
+    public function assertUpdateWorks($resource, $data, $expectedRequest, $response, $httpStatusCode = 200)
+    {
+        $uri = $resource;
+        if (array_key_exists('id', $data)) {
+            $uri .= "/" . $data['id'] . "/update";
+        } else {
+            $this->fail("No id identifier to perform update action on resource");
+        }
+        $this->_prepareRequest($uri, $data, $expectedRequest, $response, $httpStatusCode);
+
+        $actual = $this->_object->update();
+        $this->assertSame($this->_resource, $actual);
+    }
+
+    /**
+     * @param $uri
+     * @param array $dataToMap
+     * @param array $expectedRequest
+     * @param array $response
+     * @param int $httpStatusCode
+     */
+    protected function _prepareRequest($uri, $dataToMap = [], $expectedRequest = [], $response = [], $httpStatusCode = 201)
+    {
         $mapper = new Mapper();
-        $mapper->map($this->_object, new \ArrayObject($data));
+        $mapper->map($this->_object, new \ArrayObject($dataToMap));
 
         $this->_client->expects($this->once())->method("request")
             ->with($expectedRequest)
             ->willReturn($response);
 
         $this->_client->expects($this->once())->method("getResponse")->willReturn($this->_responseMock);
-        $this->_responseMock->expects($this->any())->method("getStatusCode")->willReturn(201);
+        $this->_responseMock->expects($this->any())->method("getStatusCode")->willReturn($httpStatusCode);
 
-        $this->clientFactory->expects($this->once())->method("create")->with( $resource . "/create", $this->_expectedOptions)->willReturn($this->_client);
-        $this->_mapperMock->expects($this->once())->method('map')->with($this->_resource)->willReturn($this->_resource);
-        
+        $this->clientFactory->expects($this->once())->method("create")->with($uri, $this->_expectedOptions)->willReturn($this->_client);
+
+        if (!stristr($uri, "delete")) {
+            $this->_mapperMock->expects($this->once())->method('map')->with($this->_resource)->willReturn($this->_resource);
+        }
+
         $this->_object->setClientFactory($this->clientFactory);
-
-        $actual = $this->_object->create();
-
-        $this->assertSame($this->_resource, $actual);
     }
 
     public function testCreateResource()

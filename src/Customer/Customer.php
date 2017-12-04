@@ -272,11 +272,12 @@ class Customer extends Resource implements ICustomer
 
         $customer = $this->createCustomer();
 
-        if (!empty($customers["client"])) {
-            $mapper = $this->createMapper();
-            $mapper->map($customer, new \ArrayObject($customers["client"]));
+        if ($client->getResponse()->getStatusCode() == 200) {
+            if (!empty($customers["client"])) {
+                $mapper = $this->createMapper();
+                $mapper->map($customer, new \ArrayObject($customers["client"]));
+            }
         }
-
         return $customer;
         
     }
@@ -291,18 +292,20 @@ class Customer extends Resource implements ICustomer
 
         $customers = $client->request();
 
-        if (!empty($customers['clients']['client'])) {
-            $factory = \Forestsoft\Billomat\Factory\Customer::getInstance();
+        if ($client->getResponse()->getStatusCode() == 200) {
+            if (!empty($customers['clients']['client'])) {
+                $factory = \Forestsoft\Billomat\Factory\Customer::getInstance();
 
-            foreach ($customers['clients']['client'] as $customers) {
-                $customer = $factory->create();
+                foreach ($customers['clients']['client'] as $customers) {
+                    $customer = $factory->create();
 
-                $mapper = $this->createMapper();
-                $mapper->map($customer, new \ArrayObject($customers));
+                    $mapper = $this->createMapper();
+                    $mapper->map($customer, new \ArrayObject($customers));
 
-                $list[] = $customer;
+                    $list[] = $customer;
+                }
+
             }
-
         }
         return $list;
     }
@@ -1256,17 +1259,17 @@ class Customer extends Resource implements ICustomer
 
         $customers = [];
 
-        if (!empty($customerResponse["clients"]["client"])) {
+        if ($client->getResponse()->getStatusCode() == 200) {
+            if (!empty($customerResponse["clients"]["client"])) {
+                foreach ($customerResponse["clients"]["client"] as $client) {
+                    $customer = $this->createCustomer();
+                    $mapper = $this->createMapper();
+                    $mapper->map($customer, new \ArrayObject($client));
 
-            foreach ($customerResponse["clients"]["client"] as $client) {
-                $customer = $this->createCustomer();
-                $mapper = $this->createMapper();
-                $mapper->map($customer, new \ArrayObject($client));
-
-                $customers[] = $customer;
+                    $customers[] = $customer;
+                }
             }
         }
-
         return $customers;
     }
 
