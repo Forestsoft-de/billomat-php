@@ -25,4 +25,16 @@ namespace Forestsoft\Billomat\Invoice;
 interface ISearch
 {
     const PARAM_CLIENT_ID = "client_id";
+    const PARAM_CONTACT_ID = "contact_id";
+
+    const PARAM_INVOICE_NUMBER = "invoice_number";
+    const PARAM_STATUS = "status";
+    const PARAM_PAYMENT_TYPE = "payment_type";
+    const PARAM_FROM = "from";
+    const PARAM_TO = "to";
+    const PARAM_LABEL = "label";
+    const PARAM_INTRO = "intro";
+    const PARAM_NOTE = "note";
+    const PARAM_TAGS = "tags";
+    const PARAM_ARTICLE_ID = "article_id";
 }

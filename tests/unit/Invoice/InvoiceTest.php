@@ -129,6 +129,13 @@ class InvoiceTest extends AbstractResourceTest
       ];
     }
 
+    public function testfind()
+    {
+        $this->_prepareRequest("invoices/1010", InvoiceDataset::getInvoice(), [], ["invoice" => InvoiceDataset::getRequest()], 200);
+        $invoice = $this->_object->find(1010);
+        $this->assertInstanceOf('Forestsoft\Billomat\Invoice\IInvoice', $invoice);
+    }
+
     public function testFindBy()
     {
         $invoice = $this->prepareFindBy([ISearch::PARAM_CLIENT_ID => "1010"], ["invoices" => ["invoice" => [InvoiceDataset::getInvoice()]]]);

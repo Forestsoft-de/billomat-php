@@ -341,7 +341,21 @@ class Invoice extends Resource implements IResource, IInvoice
      */
     public function find($id)
     {
-        // TODO: Implement find() method.
+        $client = $this->getClientFactory()->create($this->getResourceName() . "/$id", $this->getOptions());
+
+        $customers = $client->request();
+
+        $invoice = $this->createResource();
+
+        $index = $this->getSingularResource(); 
+
+        if ($client->getResponse()->getStatusCode() == 200) {
+            if (!empty($customers[$index])) {
+                $mapper = $this->createMapper();
+                $mapper->map($invoice, new \ArrayObject($customers[$index]));
+            }
+        }
+        return $invoice;
     }
 
     /**
