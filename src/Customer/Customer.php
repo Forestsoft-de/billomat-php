@@ -323,12 +323,10 @@ class Customer extends Resource implements ICustomer
 
         if ($client->getResponse()->getStatusCode() == 200) {
             if (!empty($customerResponse["clients"]["client"])) {
-                foreach ($customerResponse["clients"]["client"] as $client) {
-                    $customer = $this->createCustomer();
-                    $mapper = $this->createMapper();
-                    $mapper->map($customer, new \ArrayObject($client));
-
-                    $customers[] = $customer;
+                if (!empty($customerResponse["clients"]["@total"]) && 1 == $customerResponse["clients"]["@total"]) {
+                    $customers = $this->_mapCustomers([$customerResponse["clients"]["client"]], $customers);
+                } else {
+                    $customers = $this->_mapCustomers($customerResponse["clients"]["client"], $customers);
                 }
             }
         }
@@ -1348,5 +1346,22 @@ class Customer extends Resource implements ICustomer
     public function getResourceName()
     {
         return "clients";
+    }
+
+    /**
+     * @param $customerResponse
+     * @param $customers
+     * @return array
+     */
+    private function _mapCustomers($customerResponse, $customers)
+    {
+        foreach ($customerResponse as $client) {
+            $customer = $this->createCustomer();
+            $mapper = $this->createMapper();
+            $mapper->map($customer, new \ArrayObject($client));
+
+            $customers[] = $customer;
+        }
+        return $customers;
     }
 }
