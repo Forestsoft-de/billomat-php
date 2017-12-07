@@ -37,18 +37,12 @@ https://www.billomat.com/api/artikel/
 
 #### Invoices
 https://www.billomat.com/api/rechnungen/
-* Have to implement completly
-
-#### Customers
-https://www.billomat.com/api/kunden/
-* Update an Customer
+* Have to implement PDF logic
 
 #### Suppliers
 https://www.billomat.com/api/lieferanten/
 * Have to implement completly
 
-
- 
 #### Recurrings
 https://www.billomat.com/api/abo-rechnungen/
 * Have to implement completly
