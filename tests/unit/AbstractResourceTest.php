@@ -165,9 +165,20 @@ abstract class AbstractResourceTest extends BaseTest
         $actual = $this->_object->getResourceName();
         $this->assertNotNull($actual);
         $actual = strtolower(str_replace("-","", $actual));
-        $expected = strtolower(basename(get_class($this->getObject())));
-        $expected = str_replace("customer", "clients", $expected);
+
+        $expected = $this->_getSutClassName();
+
         $this->assertContains($expected, $actual);
+    }
+
+    private function _getSutClassName()
+    {
+        $reflect = new \ReflectionClass($this->getObject());
+        $expected = $reflect->getShortName();
+        $expected = strtolower($expected);
+        $expected = str_replace("customer", "client", $expected);
+
+        return $expected;
     }
 
     /**
@@ -176,10 +187,9 @@ abstract class AbstractResourceTest extends BaseTest
     public function testGetSingularResource()
     {
         $actual = $this->_object->getSingularResource();
+        $actual = strtolower(str_replace("-","", $actual));
         $this->assertNotNull($actual);
-        $actual = strtolower(str_replace(["-"],"", $actual));
-        $expected = strtolower(basename(get_class($this->getObject())));
-        $expected = str_replace("customer", "client", $expected);
+        $expected = $this->_getSutClassName();
         $this->assertContains($expected, $actual);
     }
 
