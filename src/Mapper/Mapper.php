@@ -47,7 +47,7 @@ class Mapper implements IResourceMapper
                         } else {
                             $value = [$value];
                         }
-                    } elseif ($info->hasType()) {
+                    } elseif ($info->getClass()) {
                         $value = $this->_mapType($info, $value);
                     }
                 } catch (Exception $e) {
