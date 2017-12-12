@@ -897,6 +897,13 @@ class Invoice extends Resource implements IResource, IInvoice
         return $this->items;
     }
 
+    /**
+     * @codeCoverageIgnore
+     * @param $object
+     * @param $factory
+     *
+     * @return mixed
+     */
     private function _createOrSet($object, $factory)
     {
         if (!$object) {
