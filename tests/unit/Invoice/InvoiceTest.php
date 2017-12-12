@@ -101,6 +101,17 @@ class InvoiceTest extends AbstractResourceTest
         ];
     }
 
+    public function testfindAll()
+    {
+        $this->_expectedOptions["billomat"] = array_merge($this->_expectedOptions["billomat"], ["page" => 2, "per_page" => 10]);
+        $this->_prepareRequest("invoices", [], [], ["invoices" => ["invoice" => [["id" => "1010"]]]], 200);
+
+        $list = $this->_object->findAll(10, 2);
+
+        $this->assertCount(1, $list);
+        $this->assertContainsOnly('Forestsoft\Billomat\Invoice\IInvoice', $list);
+    }
+
     /**
      * @param string $property
      * @param string $expectedInterface

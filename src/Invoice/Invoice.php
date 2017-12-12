@@ -278,7 +278,7 @@ class Invoice extends Resource implements IResource, IInvoice
      */
     public function findAll($limit = 10, $start = 1)
     {
-
+        return $this->_performFindRequest($limit, $start);
     }
 
     protected function prepareData()
