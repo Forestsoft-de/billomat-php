@@ -25,10 +25,11 @@ namespace Forestsoft\Billomat\Contact;
 
 
 use Forestsoft\Billomat\Customer\ICustomer;
+use Forestsoft\Billomat\Customer\Customer;
 use Forestsoft\Billomat\IResource;
 use Forestsoft\Billomat\Resource;
 
-class Contact extends Resource implements IContact
+class Contact extends Customer implements IContact
 {
     /**
      * @var int
@@ -41,9 +42,9 @@ class Contact extends Resource implements IContact
     protected $_resourceName = "contacts";
 
     /**
-     * @return ICsutomer
+     * @return ICustomer
      */
-    public function getCustomer()
+    public function getClient()
     {
         return $this->customer;
     }
@@ -53,7 +54,7 @@ class Contact extends Resource implements IContact
      * 
      * @return Contact
      */
-    public function setCustomer(ICustomer $customer)
+    public function setClient(ICustomer $customer)
     {
         $this->customer = $customer;
         return $this;
@@ -87,11 +88,11 @@ class Contact extends Resource implements IContact
      */
     public function findAll($limit = 10, $start = 1)
     {
-        if (!$this->getCustomer() || $this->getCustomer()->getId() == null) {
+        if (!$this->getClient() || $this->getClient()->getId() == null) {
             throw new \InvalidArgumentException("Cannot find contacts because Customer is not set");
         }
 
-        return $this->_performFindRequest($limit, $start, ["client_id" => $this->getCustomer()->getId()]);
+        return $this->_performFindRequest($limit, $start, ["client_id" => $this->getClient()->getId()]);
     }
 
     public function create()
@@ -119,6 +120,4 @@ class Contact extends Resource implements IContact
         $resource = Factory::getInstance()->create();
         return $resource;
     }
-
-
 }

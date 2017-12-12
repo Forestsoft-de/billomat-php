@@ -27,6 +27,7 @@ use Forestsoft\Billomat\AbstractResourceTest;
 use Forestsoft\Billomat\Contact\Contact;
 use Forestsoft\Billomat\Datasets\ContactDataset;
 use Forestsoft\Billomat\Datasets\CustomerDataset;
+use Forestsoft\Billomat\TestHelper;
 use PHPUnit\Framework\TestCase;
 
 class ContactTest extends AbstractResourceTest
@@ -45,7 +46,7 @@ class ContactTest extends AbstractResourceTest
         $this->_expectedOptions["billomat"] = array_merge($this->_expectedOptions["billomat"], ["page" => 2, "per_page" => 10, "client_id" => 1010]);
 
         $this->_prepareRequest("contacts", [], [], ["contacts" => ["contact" => [ContactDataset::getArray()]] ], 200);
-        $this->_object->setCustomer(CustomerDataset::getCustomer());
+        $this->_object->setClient(CustomerDataset::getCustomer());
         
         $contacts = $this->_object->findAll(10, 2);
 
@@ -60,6 +61,37 @@ class ContactTest extends AbstractResourceTest
     {
         $this->expectExceptionObject(new \InvalidArgumentException("Cannot find contacts because Customer is not set"));
         $this->_object->findAll(1,1);
+    }
+
+    /**
+     * @group unit
+     * @dataProvider dp_gettersetter
+     */
+    public function testGetterSetter($property, $value)
+    {
+        $this->performGetterSetterTest($property, $value);
+    }
+
+    public function dp_gettersetter()
+    {
+        $client = CustomerDataset::getMock();
+        return [
+            "client" => ["client", $client],
+            "name" => ["name","Max Mustermann"],
+            "salutation" => ["salutation","Mr."],
+            "first_name" => ["firstName","Max"],
+            "last_name" => ["lastName","Mustermann"],
+            "street" => ["street","Musterstrasse 1"],
+            "zip" => ["zip","12345"],
+            "city" => ["city","Musterhausen"],
+            "state" => ["state","NRW"],
+            "country_code" => ["countryCode","DE"],
+            "phone" => ["phone","012345"],
+            "fax" => ["fax","054321"],
+            "mobile" => ["mobile","0151/123456"],
+            "email" => ["email","muster@mustermann.de"],
+            "www" => ["www","http://www.mustermann.de"],
+        ];
     }
 
     /**
