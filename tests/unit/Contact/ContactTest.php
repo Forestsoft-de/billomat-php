@@ -64,6 +64,38 @@ class ContactTest extends AbstractResourceTest
     }
 
     /**
+     * @dataProvider dp_contacts
+     */
+    public function testcreate($expectedRequest, $data, $response)
+    {
+        $this->assertCreateWorks("contacts", $data, $expectedRequest, $response);
+    }
+
+    /**
+     * @dataProvider dp_contacts
+     */
+    public function testupdate($expectedRequest, $data, $response)
+    {
+        $data["id"] = "1010";
+        $this->assertUpdateWorks("contacts", $data, $expectedRequest, $response);
+    }
+
+    public function dp_contacts()
+    {
+        return [
+            "Luca Benakovic" => [
+                "expectedRequest" => [
+                    "contact" => ContactDataset::getRequest()
+                ],
+                "contact" => ContactDataset::getContact(),
+                "response" => [
+                    "contact" => ContactDataset::getRequest()
+                ]
+            ],
+        ];
+    }
+
+    /**
      * @group unit
      * @dataProvider dp_gettersetter
      */

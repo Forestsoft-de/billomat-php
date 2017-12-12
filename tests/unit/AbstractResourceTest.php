@@ -100,7 +100,7 @@ abstract class AbstractResourceTest extends BaseTest
 
         $actual = $this->_object->create();
 
-        $this->assertSame($this->_resource, $actual);
+        $this->assertSame($this->_resource, $actual, "Returned Resource of " . $resource . "/create is not an instance of created resource");
     }
 
     public function assertDeleteWorks($resource, $data, $expectedResult = true, $httpStatusCode = 200)

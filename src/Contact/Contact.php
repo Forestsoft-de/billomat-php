@@ -95,24 +95,27 @@ class Contact extends Customer implements IContact
         return $this->_performFindRequest($limit, $start, ["client_id" => $this->getClient()->getId()]);
     }
 
-    public function create()
-    {
-        // TODO: Implement create() method.
-    }
-
-    public function update()
-    {
-        // TODO: Implement update() method.
-    }
-
-    public function delete()
-    {
-        // TODO: Implement delete() method.
-    }
-
     protected function prepareData()
     {
-        // TODO: Implement prepareData() method.
+        return [
+            "contact" => [
+                "client_id" =>  $this->getClient()->getId(),
+                "name" => $this->getName(),
+                "salutation" => $this->getSalutation(),
+                "first_name" => $this->getFirstName(),
+                "last_name" => $this->getLastName(),
+                "street" => $this->getStreet(),
+                "zip" => $this->getZip(),
+                "city" => $this->getCity(),
+                "state" => $this->getState(),
+                "country_code" => $this->getCountryCode(),
+                "phone" => $this->getPhone(),
+                "fax" => $this->getFax(),
+                "mobile" => $this->getMobile(),
+                "email" => $this->getEmail(),
+                "www" => $this->getWww(),
+            ]
+        ];
     }
 
     public function createResource()

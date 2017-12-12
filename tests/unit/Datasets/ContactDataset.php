@@ -39,4 +39,49 @@ class ContactDataset
                 
         ];
     }
+
+    public static function getRequest()
+    {
+        return [
+            "client_id" =>  "10",
+            "name" => "Loca Benakovic",
+            "salutation" => "Mr.",
+            "first_name" => "Luca",
+            "last_name" => "benakovic",
+            "street" => "Musterstrasse 1",
+            "zip" => "12345",
+            "city" => "Musterhausen",
+            "state" => "NRW",
+            "country_code" => "DE",
+            "phone" => "012345",
+            "fax" => "054321",
+            "mobile" => "0151/123456",
+            "email" => "muster@mustermann.de",
+            "www" => "http://www.mustermann.de",
+        ];
+    }
+
+    public static function getContact()
+    {
+        $client = CustomerDataset::getMock();
+        $client->expects(new \PHPUnit_Framework_MockObject_Matcher_AnyInvokedCount())->method("getId")->willReturn(10);
+
+        return [
+            "client" =>  $client,
+            "name" => "Loca Benakovic",
+            "salutation" => "Mr.",
+            "first_name" => "Luca",
+            "last_name" => "benakovic",
+            "street" => "Musterstrasse 1",
+            "zip" => "12345",
+            "city" => "Musterhausen",
+            "state" => "NRW",
+            "country_code" => "DE",
+            "phone" => "012345",
+            "fax" => "054321",
+            "mobile" => "0151/123456",
+            "email" => "muster@mustermann.de",
+            "www" => "http://www.mustermann.de",
+        ];
+    }
 }

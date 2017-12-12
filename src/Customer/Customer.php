@@ -223,22 +223,6 @@ class Customer extends Resource implements ICustomer
     }
 
     /**
-     * @return ICustomer
-     */
-    public function create()
-    {
-        return $this->performCrUpAction("create");
-    }
-
-    /**
-     * @return ICustomer
-     */
-    public function update()
-    {
-        return $this->performCrUpAction("update");
-    }
-
-    /**
      * @return mixed
      */
     public function getCustomerPortalUrl()
@@ -254,14 +238,6 @@ class Customer extends Resource implements ICustomer
     {
         $this->_customerPortalUrl = $customerPortalUrl;
         return $this;
-    }
-
-    /**
-     *
-     */
-    public function delete()
-    {
-        return $this->performDelete();
     }
 
     /**

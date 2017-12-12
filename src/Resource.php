@@ -212,6 +212,27 @@ abstract class Resource implements IResource
     }
 
     /**
+     * @return mixed
+     */
+    public function create()
+    {
+        return $this->performCrUpAction("create");
+    }
+
+    public function update()
+    {
+        return $this->performCrUpAction("update");
+    }
+
+    /**
+     *
+     */
+    public function delete()
+    {
+        return $this->performDelete();
+    }
+
+    /**
      * @param $interfaceName
      * @param $value
      * @param $propertyName
