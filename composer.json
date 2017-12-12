@@ -8,7 +8,8 @@
     },
     "require-dev": {
         "phpunit/phpunit": "v5.7.25",
-        "symfony/yaml": "v3.3.13"
+        "symfony/yaml": "v3.3.13",
+        "sebastian/phpcpd": "*"
     },
     "autoload": {
         "psr-4": {"Forestsoft\\Billomat\\": "src/"}
