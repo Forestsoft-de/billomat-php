@@ -29,6 +29,11 @@ use Forestsoft\Billomat\Resource;
 class Article extends Resource implements IArticle
 {
     /**
+     * @var string
+     */
+    protected $_resourceName = "articles";
+
+    /**
      * @return mixed
      */
     public function create()
@@ -50,14 +55,6 @@ class Article extends Resource implements IArticle
     public function delete()
     {
         // TODO: Implement delete() method.
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getResourceName()
-    {
-        return 'articles';
     }
 
     /**

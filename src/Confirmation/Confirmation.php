@@ -31,6 +31,11 @@ use Forestsoft\Billomat\Resource;
 class Confirmation extends Resource implements IConfirmation
 {
     /**
+     * @var string
+     */
+    protected $_resourceName = "confirmations";
+
+    /**
      * @return mixed
      */
     public function getId()
@@ -60,14 +65,6 @@ class Confirmation extends Resource implements IConfirmation
     public function delete()
     {
         // TODO: Implement delete() method.
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getResourceName()
-    {
-        return 'confirmations';
     }
 
     /**

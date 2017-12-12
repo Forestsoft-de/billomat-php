@@ -31,6 +31,11 @@ use Forestsoft\Billomat\Resource;
 class Recurring extends Resource implements IRecurring
 {
     /**
+     * @var string
+     */
+    protected $_resourceName = "recurrings";
+
+    /**
      * @return int
      */
     public function getId()
@@ -75,14 +80,6 @@ class Recurring extends Resource implements IRecurring
     public function delete()
     {
         // TODO: Implement delete() method.
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getResourceName()
-    {
-        return "recurrings";
     }
 
     /**

@@ -36,6 +36,11 @@ class Offer extends Resource implements IOffer
     protected $id;
 
     /**
+     * @var string
+     */
+    protected $_resourceName = "offers";
+
+    /**
      * @return mixed
      */
     public function getId()
@@ -65,14 +70,6 @@ class Offer extends Resource implements IOffer
     public function delete()
     {
         // TODO: Implement delete() method.
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getResourceName()
-    {
-        return "offers";
     }
 
     /**

@@ -30,6 +30,12 @@ use Forestsoft\Billomat\Resource;
 
 class Freetext extends Resource implements IFreetext
 {
+
+    /**
+     * @var string
+     */
+    protected $_resourceName = "free-texts";
+
     /**
      * @return int
      */
@@ -75,14 +81,6 @@ class Freetext extends Resource implements IFreetext
     public function delete()
     {
         // TODO: Implement delete() method.
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getResourceName()
-    {
-        return "free-texts";
     }
 
     /**

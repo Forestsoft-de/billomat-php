@@ -37,6 +37,7 @@ use Forestsoft\Billomat\Tax\ITax;
  */
 class Customer extends Resource implements ICustomer
 {
+
     protected $_archived;
     protected $_numberPre;
     protected $_number = 1;
@@ -84,6 +85,12 @@ class Customer extends Resource implements ICustomer
     protected $_currencyCode;
     protected $_priceGroup;
     protected $_debitorAccountNumber;
+
+    /**
+     * @var string
+     */
+    protected $_resourceName = "clients";
+
 
     /**
      * @var bool
@@ -1338,14 +1345,6 @@ class Customer extends Resource implements ICustomer
             ]
         ];
         return $data;
-    }
-
-    /**
-     * @return string
-     */
-    public function getResourceName()
-    {
-        return "clients";
     }
 
     /**

@@ -20,7 +20,6 @@
  */
 
 
-
 namespace Forestsoft\Billomat;
 
 
@@ -159,7 +158,7 @@ abstract class Resource implements IResource
 
     protected function getOptions($addOptions = [])
     {
-        $options =  [
+        $options = [
             "billomat" => [
                 "billomatId" => $this->_billomatId,
                 "apiKey" => $this->_apikey,
@@ -194,7 +193,7 @@ abstract class Resource implements IResource
         if ($action === "update") {
             $action = $this->getId() . "/" . $action;
         }
-        
+
         $client = $this->getClientFactory()->create($this->getResourceName() . "/" . $action, $this->getOptions());
         $data = $this->prepareData();
         $customerResponse = $client->request($data);
@@ -202,7 +201,7 @@ abstract class Resource implements IResource
 
         $index = $this->getSingularResource();
 
-        if (in_array($client->getResponse()->getStatusCode(), [200,201])) {
+        if (in_array($client->getResponse()->getStatusCode(), [200, 201])) {
             if (!empty($customerResponse[$index])) {
                 $mapper = $this->createMapper();
                 $mapper->map($customer, new \ArrayObject($customerResponse[$index]));
@@ -220,7 +219,7 @@ abstract class Resource implements IResource
     protected function validateInterface($interfaceName, $value, $propertyName)
     {
         $oClass = new \ReflectionClass($interfaceName);
-        $constants =  $oClass->getConstants();
+        $constants = $oClass->getConstants();
 
         if (!in_array($value, $constants)) {
             throw new \InvalidArgumentException(sprintf("%s is not a valid %s. Please use one of %s::*", $value, $propertyName, $interfaceName));
@@ -279,7 +278,12 @@ abstract class Resource implements IResource
 
     public function getSingularResource()
     {
-        return substr($this->getResourceName(), 0, strlen($this->getResourceName()) -1);
+        return substr($this->getResourceName(), 0, strlen($this->getResourceName()) - 1);
+    }
+
+    public function getResourceName()
+    {
+        return $this->_resourceName;
     }
 
     abstract protected function prepareData();

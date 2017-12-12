@@ -36,6 +36,11 @@ class Contact extends Resource implements IContact
     protected $id;
 
     /**
+     * @var string
+     */
+    protected $_resourceName = "contacts";
+
+    /**
      * @return ICsutomer
      */
     public function getCustomer()
@@ -102,11 +107,6 @@ class Contact extends Resource implements IContact
     public function delete()
     {
         // TODO: Implement delete() method.
-    }
-
-    public function getResourceName()
-    {
-        return 'contacts';
     }
 
     protected function prepareData()

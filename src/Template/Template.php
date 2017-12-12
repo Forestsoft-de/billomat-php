@@ -31,6 +31,11 @@ use Forestsoft\Billomat\Resource;
 class Template extends Resource implements ITemplate
 {
     /**
+     * @var string
+     */
+    protected $_resourceName = "templates";
+
+    /**
      * @return int
      */
     public function getId()
@@ -75,14 +80,6 @@ class Template extends Resource implements ITemplate
     public function delete()
     {
         // TODO: Implement delete() method.
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getResourceName()
-    {
-        return "templates";
     }
 
     /**

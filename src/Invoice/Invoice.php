@@ -257,12 +257,12 @@ class Invoice extends Resource implements IResource, IInvoice
     protected $items;
 
 
+    /**
+     * @var string
+     */
+    protected $_resourceName = "invoices";
 
-    public function getResourceName()
-    {
-        return "invoices";
-    }
-
+    
     public function createResource()
     {
         $factory = Factory::getInstance();
