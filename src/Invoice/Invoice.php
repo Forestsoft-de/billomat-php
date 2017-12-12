@@ -262,7 +262,7 @@ class Invoice extends Resource implements IResource, IInvoice
      */
     protected $_resourceName = "invoices";
 
-    
+
     public function createResource()
     {
         $factory = Factory::getInstance();
@@ -322,25 +322,6 @@ class Invoice extends Resource implements IResource, IInvoice
                 $invoice
             )
         ];
-    }
-
-
-    /**
-     *
-     */
-    public function create()
-    {
-        return $this->performCrUpAction("create");
-    }
-
-    public function update()
-    {
-        return $this->performCrUpAction("update");
-    }
-
-    public function delete()
-    {
-        return $this->performDelete();
     }
 
     /**

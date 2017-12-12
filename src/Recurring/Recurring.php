@@ -61,30 +61,6 @@ class Recurring extends Resource implements IRecurring
     /**
      * @return mixed
      */
-    public function create()
-    {
-        // TODO: Implement create() method.
-    }
-
-    /**
-     * @return mixed
-     */
-    public function update()
-    {
-        // TODO: Implement update() method.
-    }
-
-    /**
-     * @return mixed
-     */
-    public function delete()
-    {
-        // TODO: Implement delete() method.
-    }
-
-    /**
-     * @return mixed
-     */
     public function createResource()
     {
         return Factory::getInstance()->create();
