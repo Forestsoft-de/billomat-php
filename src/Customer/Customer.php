@@ -909,11 +909,8 @@ class Customer extends Resource implements ICustomer
      * @param mixed $defaultPaymentTypes
      * @return Customer
      */
-    public function setDefaultPaymentTypes($defaultPaymentTypes)
+    public function setDefaultPaymentTypes(array $defaultPaymentTypes)
     {
-        $defaultPaymentTypes = rtrim($defaultPaymentTypes, ",");
-        
-        $defaultPaymentTypes = explode(",", $defaultPaymentTypes);
         $collectedPayments = [];
         foreach ($defaultPaymentTypes as $type) {
             switch ($type) {
@@ -936,7 +933,7 @@ class Customer extends Resource implements ICustomer
                     }
             }
         }
-        $this->_defaultPaymentTypes = implode(",", $collectedPayments);
+        $this->_defaultPaymentTypes = $collectedPayments;
 
 
         return $this;
@@ -1302,7 +1299,7 @@ class Customer extends Resource implements ICustomer
                 "locale" => $this->getLocale(),
                 "tax_rule" => $this->getTaxRule(),
                 "net_gross" => $this->getNetGross(),
-                "default_payment_types" => $this->getDefaultPaymentTypes(),
+                "default_payment_types" => implode(",", $this->getDefaultPaymentTypes()),
                 "note" => $this->getNote(),
                 "reduction" => $this->getReduction(),
                 "discount_rate_type" => $this->getDiscountRateType(),

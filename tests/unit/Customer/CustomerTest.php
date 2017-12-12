@@ -123,7 +123,7 @@ class CustomerTest extends AbstractResourceTest
             "locale" => ["locale", "test"],
             "taxRule" => ["taxRule", ITax::RULE_NO],
             "netGross" => ["netGross", "test"],
-            "defaultPaymentTypes" => ["defaultPaymentTypes", IPayment::TYPE_BANK_PAYPAL . "," . IPayment::TYPE_CASH],
+            "defaultPaymentTypes" => ["defaultPaymentTypes", [IPayment::TYPE_BANK_PAYPAL, IPayment::TYPE_CASH]],
             "note" => ["note", "test"],
             "reduction" => ["reduction", "test"],
             "discountRateType" => ["discountRateType", "test"],
@@ -247,30 +247,34 @@ class CustomerTest extends AbstractResourceTest
     {
       return [
         "All of Them" => [
-            IPayment::TYPE_CASH
-            . "," . IPayment::TYPE_BANK_PAYPAL
-            . "," . IPayment::TYPE_BANK_CARD
-            . "," . IPayment::TYPE_BANK_TRANSFER
-            . "," . IPayment::TYPE_CHECK
-            . "," . IPayment::TYPE_CASH
-            . "," . IPayment::TYPE_CREDIT_CARD
-            . "," . IPayment::TYPE_CREDIT_COUPON
-            . "," . IPayment::TYPE_CREDIT_NOTE
-            . "," . IPayment::TYPE_MISC
-            . "," . IPayment::TYPE_INVOICE_CORRECTION
-            . "," . IPayment::TYPE_DEBIT
+            [
+             IPayment::TYPE_CASH
+            ,IPayment::TYPE_BANK_PAYPAL
+            ,IPayment::TYPE_BANK_CARD
+            ,IPayment::TYPE_BANK_TRANSFER
+            ,IPayment::TYPE_CHECK
+            ,IPayment::TYPE_CASH
+            ,IPayment::TYPE_CREDIT_CARD
+            ,IPayment::TYPE_CREDIT_COUPON
+            ,IPayment::TYPE_CREDIT_NOTE
+            ,IPayment::TYPE_MISC
+            ,IPayment::TYPE_INVOICE_CORRECTION
+            ,IPayment::TYPE_DEBIT
+            ]
         ],
         "Empty" => [
-            "",
+            [],
         ],
         "Barzahlung" => [
-            "Barzahlung",
+            ["Barzahlung"],
             new \InvalidArgumentException("Barzahlung is not a valid payment method. Choose one of IPayment::TYPE_*")
         ],
         "One of them Invalid" => [
-            IPayment::TYPE_CASH
-            . ",Barzahlung"
-            . "," . IPayment::TYPE_BANK_CARD,
+            [
+                IPayment::TYPE_CASH
+                ,"Barzahlung"
+                ,IPayment::TYPE_BANK_CARD
+            ],
             new \InvalidArgumentException("Barzahlung is not a valid payment method. Choose one of IPayment::TYPE_*")
         ]
       ];
