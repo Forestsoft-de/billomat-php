@@ -36,6 +36,9 @@ class MapperTest extends TestCase
     {
         $resource = $this->getMockBuilder("Forestsoft\Billomat\Customer\Customer")->setMethods([$expectedMethod])->getMock();
 
+        if ($property == "_defaultPaymentTypes" && is_string($value)) {
+            $value = new \ArrayObject(explode(",", $value));
+        }
         $resource->expects($this->once())->method($expectedMethod)->with($value);
         
         $this->_object->map($resource, new \ArrayObject([$property => $value]));
@@ -48,7 +51,9 @@ class MapperTest extends TestCase
       return [
         "FirsName" => ["setFirstName", "first_name", "Sebastian"],
         "Archived" => ["setArchived", "archived", false],
-        "defaultPaymentTypes" => ["setDefaultPaymentTypes", "_defaultPaymentTypes", new \ArrayObject([IPayment::TYPE_BANK_CARD, IPayment::TYPE_CASH])]
+        "defaultPaymentTypes ArrayObject" => ["setDefaultPaymentTypes", "_defaultPaymentTypes", new \ArrayObject([IPayment::TYPE_BANK_CARD, IPayment::TYPE_CASH])],
+        "defaultPaymentTypes empty string" => ["setDefaultPaymentTypes", "_defaultPaymentTypes", ""],
+        "defaultPaymentTypes comma seperated list" => ["setDefaultPaymentTypes", "_defaultPaymentTypes", IPayment::TYPE_BANK_CARD ."," . IPayment::TYPE_CASH]
       ];
     } 
 
