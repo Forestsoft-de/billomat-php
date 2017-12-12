@@ -69,7 +69,7 @@ class Customer extends Resource implements ICustomer
     protected $_locale;
     protected $_taxRule = ITax::RULE_TAX;
     protected $_netGross = IPrice::BASE_SETTINGS;
-    protected $_defaultPaymentTypes = IPayment::TYPE_BANK_TRANSFER;
+    protected $_defaultPaymentTypes = [IPayment::TYPE_BANK_TRANSFER];
     protected $_note;
     protected $_reduction;
     protected $_discountRateType = ISettings::TYPE_SETTING;

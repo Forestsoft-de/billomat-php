@@ -23,6 +23,7 @@
 
 namespace Forestsoft\Billomat\Mapper;
 
+use Forestsoft\Billomat\Payment\IPayment;
 use PHPUnit\Framework\TestCase;
 
 class MapperTest extends TestCase
@@ -33,7 +34,7 @@ class MapperTest extends TestCase
      */
     public function testMap($expectedMethod, $property, $value)
     {
-        $resource = $this->getMockBuilder("Forestsoft\Billomat\Customer\ICustomer")->getMock();
+        $resource = $this->getMockBuilder("Forestsoft\Billomat\Customer\Customer")->setMethods([$expectedMethod])->getMock();
 
         $resource->expects($this->once())->method($expectedMethod)->with($value);
         
@@ -47,6 +48,7 @@ class MapperTest extends TestCase
       return [
         "FirsName" => ["setFirstName", "first_name", "Sebastian"],
         "Archived" => ["setArchived", "archived", false],
+        "defaultPaymentTypes" => ["setDefaultPaymentTypes", "_defaultPaymentTypes", IPayment::TYPE_BANK_CARD . "," . IPayment::TYPE_CASH]
       ];
     } 
 
