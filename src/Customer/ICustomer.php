@@ -278,7 +278,7 @@ interface ICustomer extends IResource
      * 
      * @return ICustomer
      */
-    public function setDefaultPaymentTypes(array $defaultPaymentTypes);
+    public function setDefaultPaymentTypes(\Traversable $defaultPaymentTypes);
 
     /**
      * @param float $reduction

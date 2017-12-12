@@ -30,6 +30,7 @@ use Forestsoft\Billomat\Mapper\Mapper;
 use Forestsoft\Billomat\Payment\IPayment;
 use Forestsoft\Billomat\Resource;
 use Forestsoft\Billomat\Tax\ITax;
+use Zend\Stdlib\ArrayObject;
 
 /**
  * Class Customer
@@ -69,7 +70,12 @@ class Customer extends Resource implements ICustomer
     protected $_locale;
     protected $_taxRule = ITax::RULE_TAX;
     protected $_netGross = IPrice::BASE_SETTINGS;
-    protected $_defaultPaymentTypes = [IPayment::TYPE_BANK_TRANSFER];
+
+    /**
+     * @var \Traversable|null
+     */
+    protected $_defaultPaymentTypes = null;
+
     protected $_note;
     protected $_reduction;
     protected $_discountRateType = ISettings::TYPE_SETTING;
@@ -112,6 +118,14 @@ class Customer extends Resource implements ICustomer
     protected $_enabledCustomerPortal;
 
     protected $_customerPortalUrl;
+
+    /**
+     * Customer constructor.
+     */
+    public function __construct()
+    {
+        $this->_defaultPaymentTypes = new \ArrayObject([IPayment::TYPE_BANK_TRANSFER]);
+    }
 
 
     /**
@@ -898,7 +912,7 @@ class Customer extends Resource implements ICustomer
     }
 
     /**
-     * @return mixed
+     * @return \Traversable
      */
     public function getDefaultPaymentTypes()
     {
@@ -906,10 +920,10 @@ class Customer extends Resource implements ICustomer
     }
 
     /**
-     * @param mixed $defaultPaymentTypes
+     * @param array $defaultPaymentTypes
      * @return Customer
      */
-    public function setDefaultPaymentTypes(array $defaultPaymentTypes)
+    public function setDefaultPaymentTypes(\Traversable $defaultPaymentTypes)
     {
         $collectedPayments = [];
         foreach ($defaultPaymentTypes as $type) {
@@ -933,7 +947,7 @@ class Customer extends Resource implements ICustomer
                     }
             }
         }
-        $this->_defaultPaymentTypes = $collectedPayments;
+        $this->_defaultPaymentTypes = new \ArrayObject($collectedPayments);
 
 
         return $this;
@@ -1299,7 +1313,7 @@ class Customer extends Resource implements ICustomer
                 "locale" => $this->getLocale(),
                 "tax_rule" => $this->getTaxRule(),
                 "net_gross" => $this->getNetGross(),
-                "default_payment_types" => implode(",", $this->getDefaultPaymentTypes()),
+                "default_payment_types" => implode(",", iterator_to_array($this->getDefaultPaymentTypes())),
                 "note" => $this->getNote(),
                 "reduction" => $this->getReduction(),
                 "discount_rate_type" => $this->getDiscountRateType(),

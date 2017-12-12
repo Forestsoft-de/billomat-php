@@ -48,7 +48,7 @@ class MapperTest extends TestCase
       return [
         "FirsName" => ["setFirstName", "first_name", "Sebastian"],
         "Archived" => ["setArchived", "archived", false],
-        "defaultPaymentTypes" => ["setDefaultPaymentTypes", "_defaultPaymentTypes", [IPayment::TYPE_BANK_CARD . "," . IPayment::TYPE_CASH]]
+        "defaultPaymentTypes" => ["setDefaultPaymentTypes", "_defaultPaymentTypes", new \ArrayObject([IPayment::TYPE_BANK_CARD, IPayment::TYPE_CASH])]
       ];
     } 
 

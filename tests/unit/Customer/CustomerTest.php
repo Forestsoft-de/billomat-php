@@ -123,7 +123,7 @@ class CustomerTest extends AbstractResourceTest
             "locale" => ["locale", "test"],
             "taxRule" => ["taxRule", ITax::RULE_NO],
             "netGross" => ["netGross", "test"],
-            "defaultPaymentTypes" => ["defaultPaymentTypes", [IPayment::TYPE_BANK_PAYPAL, IPayment::TYPE_CASH]],
+            "defaultPaymentTypes" => ["defaultPaymentTypes", new \ArrayObject([IPayment::TYPE_BANK_PAYPAL, IPayment::TYPE_CASH])],
             "note" => ["note", "test"],
             "reduction" => ["reduction", "test"],
             "discountRateType" => ["discountRateType", "test"],
@@ -247,7 +247,7 @@ class CustomerTest extends AbstractResourceTest
     {
       return [
         "All of Them" => [
-            [
+            new \ArrayObject([
              IPayment::TYPE_CASH
             ,IPayment::TYPE_BANK_PAYPAL
             ,IPayment::TYPE_BANK_CARD
@@ -260,21 +260,21 @@ class CustomerTest extends AbstractResourceTest
             ,IPayment::TYPE_MISC
             ,IPayment::TYPE_INVOICE_CORRECTION
             ,IPayment::TYPE_DEBIT
-            ]
+            ])
         ],
         "Empty" => [
-            [],
+            new \ArrayObject([]),
         ],
         "Barzahlung" => [
-            ["Barzahlung"],
+            new \ArrayObject(["Barzahlung"]),
             new \InvalidArgumentException("Barzahlung is not a valid payment method. Choose one of IPayment::TYPE_*")
         ],
         "One of them Invalid" => [
-            [
+            new \ArrayObject([
                 IPayment::TYPE_CASH
                 ,"Barzahlung"
                 ,IPayment::TYPE_BANK_CARD
-            ],
+            ]),
             new \InvalidArgumentException("Barzahlung is not a valid payment method. Choose one of IPayment::TYPE_*")
         ]
       ];

@@ -41,13 +41,7 @@ class Mapper implements IResourceMapper
                     $params = $r->getParameters();
                     /** @var \ReflectionParameter $info */
                     $info = $params[0];
-                    if ($info->isArray() && !is_array($value)) {
-                        if (stristr($value, ",")) {
-                            $value = explode(",", $value);
-                        } else {
-                            $value = [$value];
-                        }
-                    } elseif ($info->getClass()) {
+                    if ($info->getClass()) {
                         $value = $this->_mapType($info, $value);
                     }
                 } catch (Exception $e) {
@@ -74,11 +68,19 @@ class Mapper implements IResourceMapper
     {
         $typeName = $param->getClass();
         
-        switch ($typeName) {
-
+        switch ($typeName->getName()) {
+            case "Traversable":
+                if (is_string($value)) {
+                    if (stristr($value, ",")) {
+                        $value = explode(",", $value);
+                    } else {
+                        $value = [$value];
+                    }
+                    $value = new \ArrayObject($value);
+                }
             default:
-                return $value;
-        }
 
+        }
+        return $value;
     }
 }
