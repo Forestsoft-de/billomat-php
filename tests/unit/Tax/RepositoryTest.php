@@ -3,43 +3,28 @@
 namespace Forestsoft\Billomat\Test\Tax;
 
 use Forestsoft\Billomat\Tax\Repository;
+use Forestsoft\Billomat\Test\AbstractRepositoryTest;
 
-class RepositoryTest extends \PHPUnit_Framework_TestCase
+class RepositoryTest extends AbstractRepositoryTest
 {
     /**
      * @var Repository
      */
     protected $_object;
 
-    public function setUp()
+    protected function getObject()
     {
-        $this->_object = new Repository();
+        return new \Forestsoft\Billomat\Tax\Repository();
     }
 
-    /**
-     * @group unit
-     */
-    public function testInstanceOfIterator()
+
+    public function getRepositoryInterface()
     {
-        $this->assertInstanceOf('\IteratorAggregate', $this->_object);
+        return "Forestsoft\Billomat\Tax\IRepository";
     }
 
-    /**
-     * @group unit
-     */
-    public function testInstanceOfRepositoryInterface()
+    protected function getItemInterface()
     {
-        $this->assertInstanceOf('Forestsoft\Billomat\Tax\IRepository', $this->_object);
-    }
-
-    public function testAdd()
-    {
-        $item1 = $this->getMockBuilder('Forestsoft\Billomat\Tax\ITax')->getMock();
-        $item2 = $this->getMockBuilder('Forestsoft\Billomat\Tax\ITax')->getMock();
-
-        $this->_object->add($item1);
-        $this->_object->add($item2);
-
-        $this->assertEquals(2, count($this->_object));
+        return "Forestsoft\Billomat\Tax\ITax";
     }
 }

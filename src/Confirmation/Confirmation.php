@@ -25,10 +25,12 @@ namespace Forestsoft\Billomat\Confirmation;
 
 
 use Forestsoft\Billomat\Contact\IContact;
+use Forestsoft\Billomat\Freetext\IFreetext;
 use Forestsoft\Billomat\ICustomer;
 use Forestsoft\Billomat\IResource;
 use Forestsoft\Billomat\Resource;
 use Forestsoft\Billomat\Tax\IRepository;
+use Forestsoft\Billomat\Template\ITemplate;
 
 class Confirmation extends Resource implements IConfirmation
 {
@@ -80,7 +82,7 @@ class Confirmation extends Resource implements IConfirmation
     /**
      * @var string
      */
-    protected $status;
+    protected $status = "DRAFT";
 
     /**
      * @var string
@@ -167,11 +169,62 @@ class Confirmation extends Resource implements IConfirmation
     protected $offer;
 
     /**
+     * @var ITemplate
+     */
+    protected $template;
+
+    /**
+     * @var IFreetext
+     */
+    protected $freeText;
+
+    /**
+     * @var IRepo
+     */
+    protected $items;
+
+    /**
+     * @return ITemplate
+     */
+    public function getTemplate()
+    {
+        return $this->template;
+    }
+
+    /**
+     * @param ITemplate $template
+     * @return Confirmation
+     */
+    public function setTemplate(ITemplate $template)
+    {
+        $this->template = $template;
+        return $this;
+    }
+
+    /**
+     * @return IFreetext
+     */
+    public function getFreeText()
+    {
+        return $this->freeText;
+    }
+
+    /**
+     * @param IFreetext $freeText
+     * @return Confirmation
+     */
+    public function setFreeText(IFreetext $freeText)
+    {
+        $this->freeText = $freeText;
+        return $this;
+    }
+
+    /**
      * @return mixed
      */
     public function getId()
     {
-        // TODO: Implement getId() method.
+        return $this->_id;
     }
 
     /**

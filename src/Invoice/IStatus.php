@@ -19,10 +19,7 @@
  *
  */
 
-
-
 namespace Forestsoft\Billomat\Invoice;
-
 
 interface IStatus
 {

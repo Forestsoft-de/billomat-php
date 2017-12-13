@@ -26,6 +26,9 @@ namespace Forestsoft\Billomat\Test\Confirmation;
 
 use Forestsoft\Billomat\AbstractResourceTest;
 use Forestsoft\Billomat\Confirmation\Confirmation;
+use Forestsoft\Billomat\Datasets\CustomerDataset;
+use Forestsoft\Billomat\IPrice;
+use Forestsoft\Billomat\TestHelper;
 
 class ConfirmationTest extends AbstractResourceTest
 {
@@ -43,6 +46,48 @@ class ConfirmationTest extends AbstractResourceTest
     public function getFactoryClassName()
     {
         return "Forestsoft\Billomat\Confirmation\Factory";
+    }
+
+    /**
+     * @group unit
+     * @dataProvider dp_gettersetter
+     */
+    public function testGetterSetter($property, $value)
+    {
+        $this->performGetterSetterTest($property, $value);
+    }
+
+    public function dp_gettersetter()
+    {
+        $contact = TestHelper::getMock("Forestsoft\Billomat\Contact\IContact");
+        $client = CustomerDataset::getMock();
+
+        $offer = TestHelper::getMock("Forestsoft\Billomat\Offer\IOffer");
+        $freetext = TestHelper::getMock("Forestsoft\Billomat\Freetext\IFreetext");
+
+        $template = TestHelper::getMock("Forestsoft\Billomat\Template\ITemplate");
+
+        return [
+            "id"    => ["id", "1010"],
+            "client" => ["client", $client],
+            "contact" => ["contact", $contact],
+            "address" => ["address", "Musterstraße 1"],
+            "number_pre" => ["numberPre", "INV"],
+            "number" => ["number", 12345],
+            "numberLength" => ["numberLength", 5],
+            "created" => ["created", "2017-12-01"],
+            "title" => ["title", "My new Invoice"],
+            "label" => ["label", "My new Label"],
+            "intro" => ["intro", "Dear Mr. Schenider"],
+            "note" => ["note", "My custom note"],
+            "reduction" => ["reduction", "10%"],
+            "currencyCode" => ["currencyCode", "EUR"],
+            "netGross" => ["netGross", IPrice::BASE_GROSS],
+            "quote" => ["quote", 20.35],
+            "offer" => ["offer", $offer],
+            "freetext" => ["freetext", $freetext],
+            "template" => ["template", $template],
+        ];
     }
 
     /**
