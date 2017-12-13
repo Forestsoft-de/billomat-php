@@ -26,6 +26,5 @@ namespace Forestsoft\Billomat\Confirmation;
 
 interface IConfirmation
 {
-
     public function getId();
 }

@@ -28,4 +28,38 @@ interface ITax
      const RULE_TAX = "TAX";
      const RULE_NO = "NO_TAX";
      const RULE_COUNTRY = "COUNTRY";
+
+     /**
+      * @param string
+      * @return ITax
+      */
+     public function setName($name);
+
+     /**
+      * @return string
+      */
+     public function getName();
+
+     /**
+      * @param float $rate
+      *
+      * @return ITax
+      */
+     public function setRate($rate);
+
+     /**
+      * @return float
+      */
+     public function getRate();
+
+     /**
+      * @param float $amount
+      * @return ITax
+      */
+     public function setAmount($amount);
+
+     /**
+      * @return float
+      */
+     public function getAmount();
 }
