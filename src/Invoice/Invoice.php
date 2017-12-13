@@ -35,6 +35,7 @@ use Forestsoft\Billomat\Offer\IOffer;
 use Forestsoft\Billomat\Payment\IPayment;
 use Forestsoft\Billomat\Resource;
 use Forestsoft\Billomat\Template\ITemplate;
+use Zend\Stdlib\ArrayObject;
 
 class Invoice extends Resource implements IResource, IInvoice
 {
@@ -143,9 +144,9 @@ class Invoice extends Resource implements IResource, IInvoice
     /**
      * List of IPayment::*
      *
-     * @var array
+     * @var \Traversable
      */
-    protected $paymentTypes = [];
+    protected $paymentTypes = null;
 
     /**
      * @var IInvoice
@@ -208,6 +209,8 @@ class Invoice extends Resource implements IResource, IInvoice
         $this->recurring =    $this->_createOrSet($recurring, "Forestsoft\Billomat\Recurring\Factory");
         $this->invoice =      $invoice; //prevent loop
         $this->items =        $items;
+
+        $this->paymentTypes = new \ArrayObject();
     }
 
     /**
@@ -293,25 +296,25 @@ class Invoice extends Resource implements IResource, IInvoice
             "invoice" => array_merge(
                 [
                 "client_id" => $this->getClient()->getId(),
-                "address" => "",
-                "number_pre" => "",
-                "number" => "",
-                "number_length" => "",
-                "date" => date("Y-m-d"),
-                "supply_date" => date("Y-m-d"),
-                "supply_date_type" => ISupplyDate::DELIVERY_DATE,
-                "due_date" => date("Y-m-d"),
-                "discount_rate" => "",
-                "discount_date" => date("Y-m-d"),
-                "title" => "",
-                "label" => "",
-                "intro" => "",
-                "note" => "",
-                "reduction" => "",
-                "currency_code" => "",
-                "net_gross" => IPrice::BASE_GROSS,
-                "quote" => "",
-                "payment_types" => [IPayment::TYPE_BANK_TRANSFER],
+                "address" => $this->getAddress(),
+                "number_pre" => $this->getNumberPre(),
+                "number" => $this->getNumber(),
+                "number_length" => $this->getNumberLength(),
+                "date" => $this->getDate(),
+                "supply_date" => $this->getSupplyDate(),
+                "supply_date_type" => $this->getSupplyDateType(),
+                "due_date" => $this->getDueDate(),
+                "discount_rate" => $this->getDiscountRate(),
+                "discount_date" => $this->getDiscountDate(),
+                "title" => $this->getTitle(),
+                "label" => $this->getLabel(),
+                "intro" => $this->getIntro(),
+                "note" => $this->getNote(),
+                "reduction" => $this->getReduction(),
+                "currency_code" => $this->getCurrencyCode(),
+                "net_gross" => $this->getNetGross(),
+                "quote" => $this->getQuote(),
+                "payment_types" => implode(",", iterator_to_array($this->getPaymentTypes())),
                 "invoice_id" => $this->getInvoice()->getId(),
                 "offer_id" => $this->getOffer()->getId(),
                 "confirmation_id" => $this->getConfirmation()->getId(),
@@ -744,7 +747,7 @@ class Invoice extends Resource implements IResource, IInvoice
      * @param array $paymentTypes
      * @return Invoice
      */
-    public function setPaymentTypes(array $paymentTypes)
+    public function setPaymentTypes(\Traversable $paymentTypes)
     {
         foreach ($paymentTypes as $type) {
             $this->validateInterface('Forestsoft\Billomat\Payment\IPayment', $type, 'paymentType');
@@ -754,7 +757,7 @@ class Invoice extends Resource implements IResource, IInvoice
     }
 
     /**
-     * @return array
+     * @return \Traversable
      */
     public function getPaymentTypes()
     {

@@ -232,7 +232,7 @@ class InvoiceTest extends AbstractResourceTest
             "currencyCode" => ["currencyCode", "EUR"],
             "netGross" => ["netGross", IPrice::BASE_GROSS],
             "quote" => ["quote", 20.35],
-            "payment_types" => ["paymentTypes", [IPayment::TYPE_BANK_PAYPAL, IPayment::TYPE_CASH]],
+            "payment_types" => ["paymentTypes", new ArrayObject([IPayment::TYPE_BANK_PAYPAL, IPayment::TYPE_CASH])],
             "invoice" => ["invoice", $invoice],
             "offer" => ["offer", $offer],
             "discountDate" => ["discountDate", "2017-12-24"],
@@ -278,7 +278,7 @@ class InvoiceTest extends AbstractResourceTest
                 "netGross", "hurz", new \InvalidArgumentException("hurz is not a valid netGross. Please use one of Forestsoft\Billomat\IPrice::*")
             ],
             "stones is not a valid payment type" => [
-                "paymentTypes", ["stones"], new \InvalidArgumentException("stones is not a valid paymentType. Please use one of Forestsoft\Billomat\Payment\IPayment::*")
+                "paymentTypes", new ArrayObject(["stones"]), new \InvalidArgumentException("stones is not a valid paymentType. Please use one of Forestsoft\Billomat\Payment\IPayment::*")
             ],
             "there is an invalid InvoiceItem" => [
                 "items", new ArrayObject([$invoiceItem, "stones", $invoiceItem]), new \InvalidArgumentException("There is an invalid invoice item in item collection")
