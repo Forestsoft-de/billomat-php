@@ -7,9 +7,9 @@
  */
 
 namespace Forestsoft\Billomat\Test;
+use PHPUnit\Framework\TestCase;
 
-
-abstract class AbstractRepositoryTest extends \PHPUnit_Framework_TestCase
+abstract class AbstractRepositoryTest extends TestCase
 {
 
     protected $_object;
