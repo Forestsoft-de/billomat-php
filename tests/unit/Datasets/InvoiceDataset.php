@@ -65,15 +65,6 @@ class InvoiceDataset
             "recurring_id" => 1,
             "free_text_id" => 1,
             "template_id" => 10,
-            "invoice-items" => [
-                [
-                    "unit" => "Stunde",
-                    "unit_price" => 90,
-                    "quantity" => 1,
-                    "title" => "Arbeiten",
-                    "article_id" => 123456
-                ]
-            ]
         ];
     }
 

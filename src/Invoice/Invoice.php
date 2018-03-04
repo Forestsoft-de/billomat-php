@@ -307,6 +307,8 @@ class Invoice extends Resource implements IResource, IInvoice
                 }
             }
         }
+
+        return $invoice;
     }
 
 
