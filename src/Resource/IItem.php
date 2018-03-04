@@ -9,6 +9,7 @@
 namespace Forestsoft\Billomat\Resource;
 
 
+use Forestsoft\Billomat\Article\IArticle;
 use Forestsoft\Billomat\IResource;
 
 interface IItem extends IResource
@@ -67,5 +68,17 @@ interface IItem extends IResource
      * @return string
      */
     public function setDescription($description);
+
+    /**
+     * @param IArticle $article
+     * @return mixed
+     */
+    public function setArticle(IArticle $article);
+
+    /**
+     * @return IArticle
+     */
+    public function getArticle();
+
 
 }

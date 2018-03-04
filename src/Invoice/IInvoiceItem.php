@@ -26,5 +26,6 @@ use Forestsoft\Billomat\Resource\IItem;
 
 interface IInvoiceItem extends IItem
 {
+    
 
 }

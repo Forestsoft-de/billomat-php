@@ -61,6 +61,10 @@ class InvoiceTest extends AbstractResourceTest
         $this->_object->setPaymentTypes(new \ArrayObject([IPayment::TYPE_BANK_TRANSFER]));
 
         $invoiceItemFactory = \Forestsoft\Billomat\Factory\InvoiceItem::getInstance();
+        $config = \Forestsoft\Billomat\TestHelper::getConfig();
+        $invoiceItemFactory->setConfig(
+            $config['integration']['billomat']
+        );
         $invoiceItem = $invoiceItemFactory->create();
 
         $invoiceItem->setQuantity(1);
@@ -75,8 +79,9 @@ class InvoiceTest extends AbstractResourceTest
         $article->setId(155945);
 
         $invoiceItem2->setQuantity(1);
+        $invoiceItem2->setPosition(2);
         $invoiceItem2->setTitle("Telefongespräch 10 min");
-        $invoiceItem2->setArticleId($article->getId());
+        $invoiceItem2->setArticle($article);
         $invoiceItem2->setUnitPrice(10);
         $invoiceItem2->setUnit("Stunde");
         

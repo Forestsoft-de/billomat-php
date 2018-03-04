@@ -254,28 +254,9 @@ class InvoiceItem extends Resource implements IInvoiceItem
      */
     protected function prepareData()
     {
-           $totalGross = $this->getQuantity() * $this->getUnitPrice() - $this->getReduction();
-           $totalGrossUnreduced = $this->getQuantity() * $this->getUnitPrice();
-
-           $taxRate = ($this->getTax()->getRate() / 100);
-           $totalNet = number_format($totalGross / (1 + $taxRate), 2);
-           
-           $totalNetUnreduced = number_format($totalGrossUnreduced / (1 + $taxRate), 2);
-
            $item = [
                "position" => $this->position,
-               "unit" => $this->getUnit(),
-               "quantity" => $this->getQuantity(),
-               "unit_price" => $this->getUnitPrice(),
-               "tax_name" => $this->getTax()->getName(),
-               "tax_rate" => $this->getTax()->getRate(),
-               "title" => $this->getTitle(),
-               "description" => $this->getDescription(),
-               "total_gross" => $totalGross,
-               "total_net" => $totalNet,
                "reduction" => $this->getReduction(),
-               "total_gross_unreduced" => $totalGrossUnreduced,
-               "total_net_unreduced" => $totalNetUnreduced,
            ];
 
            if ($this->getId()) {
@@ -288,6 +269,45 @@ class InvoiceItem extends Resource implements IInvoiceItem
 
            if ($this->getInvoice()->getId()) {
                $item["invoice_id"] = $this->getInvoice()->getId();
+           }
+           if ($this->getUnitPrice()) {
+               $item["unit_price"] = $this->getUnitPrice();
+
+               $totalGross = $this->getQuantity() * $this->getUnitPrice() - $this->getReduction();
+               $totalGrossUnreduced = $this->getQuantity() * $this->getUnitPrice();
+
+               $taxRate = ($this->getTax()->getRate() / 100);
+               $totalNet = number_format($totalGross / (1 + $taxRate), 2);
+
+               $totalNetUnreduced = number_format($totalGrossUnreduced / (1 + $taxRate), 2);
+
+               $item["total_gross"]  = $totalGross;
+               $item["total_net"]    = $totalNet;
+               $item["total_gross_unreduced"] = $totalGrossUnreduced;
+               $item["total_net_unreduced"] = $totalNetUnreduced;
+
+           }
+           if ($this->getUnit()) {
+               $item["unit"] = $this->getUnit();
+           }
+
+           if ($this->getTitle()) {
+                $item["title"] = $this->getTitle();
+           }
+           if ($this->getQuantity()) {
+                $item["quantity"] = $this->getQuantity();
+           }
+
+           if ($this->getTax()->getRate()) {
+               $item["tax_rate"] = $this->getTax()->getRate();
+           }
+
+           if ($this->getTax()->getName()) {
+               $item["tax_name"] = $this->getTax()->getName();
+           }
+
+           if ($this->getDescription()) {
+               $item["description"] = $this->getDescription();
            }
 
         return [ "invoice-item" => $item];
