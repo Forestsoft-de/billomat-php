@@ -2,7 +2,7 @@
 /**
  * ForestSoft Billomat PHP
  * @link https://github.com/Forestsoft-de/billomat-php
- * @copyright Copyright (c) 2017. ForestSoft Sebastian Förster
+ * @copyright Copyright (c) 2018. ForestSoft Sebastian Förster
  * @license Apache 2.0 https://github.com/Forestsoft-de/billomat-php/blob/master/LICENSE
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,21 +19,32 @@
  *
  */
 
-namespace Forestsoft\Billomat\Article;
+namespace Forestsoft\Billomat\Factory;
 
+use Forestsoft\Billomat\IPrice;
 
-use Forestsoft\Billomat\IResource;
-
-interface IArticle extends IResource
+/**
+ * Class InvoiceItem
+ * @package Forestsoft\Billomat\Factory
+ * 
+ * @method \Forestsoft\Billomat\Factory\Invoice getInstance()
+ */
+class Invoice extends AbstractFactory implements IFactory
 {
+    protected static $factoryInstance;
+    
     /**
-     * @return int
+     * @return \Forestsoft\Billomat\Invoice\Invoice
      */
-    public function getId();
+    public function create()
+    {
+        $invoice = new \Forestsoft\Billomat\Invoice\Invoice();
 
-    /**
-     * @param int $id
-     * @return mixed
-     */
-    public function setId($id);
+        $this->populateSettings($invoice);
+
+        $invoice->setNetGross(IPrice::BASE_NET);
+
+        return $invoice;
+    }
+
 }

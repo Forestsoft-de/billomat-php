@@ -2,7 +2,7 @@
 /**
  * ForestSoft Billomat PHP
  * @link https://github.com/Forestsoft-de/billomat-php
- * @copyright Copyright (c) 2017. ForestSoft Sebastian Förster
+ * @copyright Copyright (c) 2018. ForestSoft Sebastian Förster
  * @license Apache 2.0 https://github.com/Forestsoft-de/billomat-php/blob/master/LICENSE
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,58 +19,52 @@
  *
  */
 
-namespace Forestsoft\Billomat\Article;
+namespace Forestsoft\Billomat\Test\Factory;
 
+use Forestsoft\Billomat\Factory\Invoice;
+use Forestsoft\Billomat\IPrice;
+use Forestsoft\Billomat\Test\AbstractFactoryTest;
 
-use Forestsoft\Billomat\ICustomer;
-use Forestsoft\Billomat\IResource;
-use Forestsoft\Billomat\Resource;
-
-class Article extends Resource implements IArticle
+class InvoiceTest extends AbstractFactoryTest
 {
 
     /**
-     * @var 
+     * @var Invoice
      */
-    protected $_id;
+    protected $_object;
 
     /**
      * @return mixed
      */
-    public function getId()
+    protected function getResourceInterface()
     {
-        return $this->_id;
-    }
-
-    /**
-     * @param mixed $id
-     * @return Article
-     */
-    public function setId($id)
-    {
-        $this->_id = $id;
-        return $this;
-    }
-
-    /**
-     * @var string
-     */
-    protected $_resourceName = "articles";
-
-    /**
-     * @return mixed
-     */
-    public function createResource()
-    {
-        return Factory::getInstance()->create();
+        return 'Forestsoft\Billomat\Invoice\IInvoice';
     }
 
     /**
      * @return mixed
      */
-    protected function prepareData()
+    protected function getObject()
     {
-        // TODO: Implement prepareData() method.
+        return new Invoice();
     }
 
+
+    /**
+     * @group unit
+     * @dataProvider dp_defaults
+     */
+    public function testGetInstanceSetDefaults($key, $expectedValue)
+    {
+        $this->assertFactorySetDefault($key, $expectedValue);
+    }
+    
+    public function dp_defaults() 
+    {
+      return [
+        "netGross" => [
+            "netGross", IPrice::BASE_NET
+        ],
+      ];
+    }
 }

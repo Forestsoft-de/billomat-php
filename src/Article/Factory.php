@@ -25,12 +25,17 @@ namespace Forestsoft\Billomat\Article;
 use Forestsoft\Billomat\Factory\AbstractFactory;
 use Forestsoft\Billomat\Factory\IFactory;
 
+/**
+ * Class Factory
+ * @package Forestsoft\Billomat\Article
+ * @method \Forestsoft\Billomat\Article\Factory getInstance()
+ */
 class Factory extends AbstractFactory implements IFactory
 {
     protected static $factoryInstance;
 
     /**
-     * @return mixed
+     * @return \Forestsoft\Billomat\Article\Article
      */
     public function create()
     {

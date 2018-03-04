@@ -2,7 +2,7 @@
 /**
  * ForestSoft Billomat PHP
  * @link https://github.com/Forestsoft-de/billomat-php
- * @copyright Copyright (c) 2017. ForestSoft Sebastian Förster
+ * @copyright Copyright (c) 2018. ForestSoft Sebastian Förster
  * @license Apache 2.0 https://github.com/Forestsoft-de/billomat-php/blob/master/LICENSE
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,21 +19,26 @@
  *
  */
 
-namespace Forestsoft\Billomat\Article;
 
 
-use Forestsoft\Billomat\IResource;
+namespace Forestsoft\Billomat\Datasets;
 
-interface IArticle extends IResource
+
+use Forestsoft\Billomat\Invoice\ISupplyDate;
+use Forestsoft\Billomat\IPrice;
+use Forestsoft\Billomat\Payment\IPayment;
+use Forestsoft\Billomat\TestHelper;
+
+class ArticleDataset
 {
-    /**
-     * @return int
-     */
-    public function getId();
+    public static function getRequest()
+    {
+        return [
+        ];
+    }
 
-    /**
-     * @param int $id
-     * @return mixed
-     */
-    public function setId($id);
+    public static function getMock()
+    {
+        return TestHelper::getMock('Forestsoft\Billomat\Article\IArticle');
+    }
 }

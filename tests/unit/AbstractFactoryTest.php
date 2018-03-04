@@ -57,6 +57,16 @@ abstract class AbstractFactoryTest extends BaseTest
         $this->assertInstanceOf($this->getResourceInterface(), $this->_object->create());
     }
 
+    /**
+     * @param $key
+     * @param $expectedValue
+     */
+    protected function assertFactorySetDefault($key, $expectedValue)
+    {
+        $object = $this->_object->create();
+        $this->assertAttributeEquals($expectedValue, $key, $object, sprintf('Property "%s" of %s is not set to "%s"', $key, get_class($object), $expectedValue));
+    }
+
     abstract protected function getResourceInterface();
     
     abstract protected function getObject();

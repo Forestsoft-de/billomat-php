@@ -31,6 +31,10 @@ use Forestsoft\Billomat\TestHelper;
 
 class InvoiceDataset
 {
+    public static function getMock()
+    {
+        return TestHelper::getMock('Forestsoft\Billomat\Invoice\IInvoice');
+    }
     public static function getRequest()
     {
         return [
@@ -55,12 +59,21 @@ class InvoiceDataset
             "net_gross" => IPrice::BASE_GROSS,
             "quote" => 1.000,
             "payment_types" => IPayment::TYPE_BANK_TRANSFER,
-            "invoice_id" => "",
-            "offer_id" => "1",
-            "confirmation_id" => "1",
-            "recurring_id" => "1",
-            "free_text_id" => "1",
-            "template_id" => "10",
+            "invoice_id" => null,
+            "offer_id" => 1,
+            "confirmation_id" => 1,
+            "recurring_id" => 1,
+            "free_text_id" => 1,
+            "template_id" => 10,
+            "invoice-items" => [
+                [
+                    "unit" => "Stunde",
+                    "unit_price" => 90,
+                    "quantity" => 1,
+                    "title" => "Arbeiten",
+                    "article_id" => 123456
+                ]
+            ]
         ];
     }
 
@@ -86,6 +99,13 @@ class InvoiceDataset
 
         $template = TemplateDataset::getMock();
         $template->expects(new \PHPUnit_Framework_MockObject_Matcher_AnyInvokedCount())->method("getId")->willReturn(10);
+
+        $item = ItemDataset::getMock();
+        $item->expects(new \PHPUnit_Framework_MockObject_Matcher_AnyInvokedCount())->method("getQuantity")->willReturn(1);
+        $item->expects(new \PHPUnit_Framework_MockObject_Matcher_AnyInvokedCount())->method("getUnitPrice")->willReturn(90);
+        $item->expects(new \PHPUnit_Framework_MockObject_Matcher_AnyInvokedCount())->method("getTitle")->willReturn("Arbeiten");
+        $item->expects(new \PHPUnit_Framework_MockObject_Matcher_AnyInvokedCount())->method("getUnit")->willReturn("Stunde");
+        $item->expects(new \PHPUnit_Framework_MockObject_Matcher_AnyInvokedCount())->method("getArticleId")->willReturn(123456);
 
         return [
             "client" => $customer,
@@ -116,6 +136,7 @@ class InvoiceDataset
             "recurring" => $recurring,
             "freetext" => $freetext,
             "template" => $template,
+            "items" => new \ArrayObject([$item])
         ];
     }
 }

@@ -22,6 +22,9 @@
 namespace Forestsoft\Billomat\Test\Integration;
 
 use Forestsoft\Billomat\Invoice\Invoice;
+use Forestsoft\Billomat\Invoice\ISupplyDate;
+use Forestsoft\Billomat\IPrice;
+use Forestsoft\Billomat\Payment\IPayment;
 use PHPUnit\Framework\TestCase;
 
 class InvoiceTest extends AbstractResourceTest
@@ -48,6 +51,43 @@ class InvoiceTest extends AbstractResourceTest
         $customer->setId(1624078);
 
         $this->_object->setClient($customer);
+
+        $this->_object->setAddress("Schloss-Dyck-Str. 88b, 41238 Mönchengladbach");
+        $this->_object->setDate(date("Y-m-d"));
+        $this->_object->setCurrencyCode("EUR");
+        $this->_object->setNetGross(IPrice::BASE_NET);
+        $this->_object->setSupplyDate(date("Y-m-d"));
+        $this->_object->setSupplyDateType(ISupplyDate::DELIVERY_DATE);
+        $this->_object->setPaymentTypes(new \ArrayObject([IPayment::TYPE_BANK_TRANSFER]));
+
+        $invoiceItemFactory = \Forestsoft\Billomat\Factory\InvoiceItem::getInstance();
+        $invoiceItem = $invoiceItemFactory->create();
+
+        $invoiceItem->setQuantity(1);
+        $invoiceItem->setTitle("Telefongespräch");
+        $invoiceItem->setUnitPrice(40);
+        $invoiceItem->setUnit("Stunde");
+
+        $invoiceItem2 = $invoiceItemFactory->create();
+
+
+        $article = \Forestsoft\Billomat\Article\Factory::getInstance()->create();
+        $article->setId(155945);
+
+        $invoiceItem2->setQuantity(1);
+        $invoiceItem2->setTitle("Telefongespräch 10 min");
+        $invoiceItem2->setArticleId($article->getId());
+        $invoiceItem2->setUnitPrice(10);
+        $invoiceItem2->setUnit("Stunde");
+        
+        $items =  [
+            $invoiceItem,
+            $invoiceItem2
+        ];
+
+
+        $this->_object->setItems(new \ArrayObject($items));
+
 
         $this->_object->create();
     }

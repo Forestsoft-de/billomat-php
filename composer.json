@@ -12,6 +12,9 @@
         "sebastian/phpcpd": "*"
     },
     "autoload": {
-        "psr-4": {"Forestsoft\\Billomat\\": "src/"}
+        "psr-4": {
+            "Forestsoft\\Billomat\\": "src/",
+            "Forestsoft\\Billomat\\Datasets\\": "tests/unit/Datasets"
+        }
     }
 }

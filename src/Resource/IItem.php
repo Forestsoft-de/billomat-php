@@ -9,7 +9,9 @@
 namespace Forestsoft\Billomat\Resource;
 
 
-interface IItem
+use Forestsoft\Billomat\IResource;
+
+interface IItem extends IResource
 {
     /**
      * @param string $unit
@@ -54,4 +56,16 @@ interface IItem
      * @return string
      */
     public function getTitle();
+
+    /**
+     * @return string
+     */
+    public function getDescription();
+
+    /**
+     * @param $description
+     * @return string
+     */
+    public function setDescription($description);
+
 }

@@ -24,8 +24,17 @@
 namespace Forestsoft\Billomat\Invoice;
 
 
-class InvoiceItem implements IInvoiceItem
+use Forestsoft\Billomat\Article\Article;
+use Forestsoft\Billomat\Article\IArticle;
+use Forestsoft\Billomat\IResource;
+use Forestsoft\Billomat\Resource;
+use Forestsoft\Billomat\Tax\ITax;
+
+class InvoiceItem extends Resource implements IInvoiceItem
 {
+
+    protected $_resourceName = "invoice-items";
+
     /**
      * @var string
      */
@@ -45,6 +54,118 @@ class InvoiceItem implements IInvoiceItem
      * @var string
      */
     protected $title;
+
+    /**
+     * @var int
+     */
+    protected $id;
+
+    /**
+     * @var IInvoice
+     */
+    protected $invoice;
+
+    /**
+     * @var int 
+     */
+    protected $position = 1;
+    
+    /**
+     * @var IArticle
+     */
+    protected $article;
+
+    protected $reduction = 0;
+
+    protected $description;
+
+    /**
+     * @return int
+     */
+    public function getReduction()
+    {
+        return $this->reduction;
+    }
+
+    /**
+     * @param int $reduction
+     * @return InvoiceItem
+     */
+    public function setReduction($reduction)
+    {
+        $this->reduction = $reduction;
+        return $this;
+    }
+
+    /**
+     * @return ITax
+     */
+    public function getTax()
+    {
+        return $this->tax;
+    }
+
+    /**
+     * @param ITax $tax
+     * @return InvoiceItem
+     */
+    public function setTax($tax)
+    {
+        $this->tax = $tax;
+        return $this;
+    }
+
+    /**
+     * @var ITax
+     */
+    protected $tax;
+
+    /**
+     * @return int
+     */
+    public function getArticleId()
+    {
+        return $this->getArticle()->getId();
+    }
+
+    /**
+     * @return IArticle
+     */
+    public function getArticle()
+    {
+        if ($this->article == null) {
+            return \Forestsoft\Billomat\Article\Factory::getInstance()->create();
+        }
+        return $this->article;
+    }
+
+    /**
+     * @param int $articleId
+     * @return InvoiceItem
+     */
+    public function setArticle(IArticle $article)
+    {
+        $this->article = $article;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDescription()
+    {
+        return $this->description;
+    }
+
+    /**
+     * @param $description
+     * @return mixed
+     */
+    public function setDescription($description)
+    {
+        $this->description = $description;
+        return $this;
+    }
 
     /**
      * @param string $unit
@@ -70,7 +191,7 @@ class InvoiceItem implements IInvoiceItem
      */
     public function setUnitPrice($unitPrice)
     {
-        $this->unitPrice = $unitPrice;
+        $this->unitPrice = floatval($unitPrice);
         return $this;
     }
 
@@ -88,7 +209,7 @@ class InvoiceItem implements IInvoiceItem
      */
     public function setQuantity($quantity)
     {
-        $this->quantity = $quantity;
+        $this->quantity = intval($quantity);
         return $this;
     }
 
@@ -116,5 +237,116 @@ class InvoiceItem implements IInvoiceItem
     public function getTitle()
     {
         return $this->title;
+    }
+
+    /**
+     * @return IResource
+     */
+    public function createResource()
+    {
+        $factory = \Forestsoft\Billomat\Factory\InvoiceItem::getInstance();
+        $invoiceItem = $factory->create();
+        return $invoiceItem;
+    }
+
+    /**
+     * @return mixed
+     */
+    protected function prepareData()
+    {
+           $totalGross = $this->getQuantity() * $this->getUnitPrice() - $this->getReduction();
+           $totalGrossUnreduced = $this->getQuantity() * $this->getUnitPrice();
+
+           $taxRate = ($this->getTax()->getRate() / 100);
+           $totalNet = number_format($totalGross / (1 + $taxRate), 2);
+           
+           $totalNetUnreduced = number_format($totalGrossUnreduced / (1 + $taxRate), 2);
+
+           $item = [
+               "position" => $this->position,
+               "unit" => $this->getUnit(),
+               "quantity" => $this->getQuantity(),
+               "unit_price" => $this->getUnitPrice(),
+               "tax_name" => $this->getTax()->getName(),
+               "tax_rate" => $this->getTax()->getRate(),
+               "title" => $this->getTitle(),
+               "description" => $this->getDescription(),
+               "total_gross" => $totalGross,
+               "total_net" => $totalNet,
+               "reduction" => $this->getReduction(),
+               "total_gross_unreduced" => $totalGrossUnreduced,
+               "total_net_unreduced" => $totalNetUnreduced,
+           ];
+
+           if ($this->getId()) {
+               $item["id"] = $this->getId();
+           }
+
+           if ($this->getArticleId()) {
+               $item["article_id"] = $this->getArticleId();
+           }
+
+           if ($this->getInvoice()->getId()) {
+               $item["invoice_id"] = $this->getInvoice()->getId();
+           }
+
+        return [ "invoice-item" => $item];
+    }
+
+    /**
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param int $id
+     * @return InvoiceItem
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+        return $this;
+    }
+
+    /**
+     * @return IInvoice
+     */
+    public function getInvoice()
+    {
+        if ($this->invoice == null) {
+            return \Forestsoft\Billomat\Invoice\Factory::getInstance()->create();
+        }
+        return $this->invoice;
+    }
+
+    /**
+     * @param IInvoice $invoice
+     * @return InvoiceItem
+     */
+    public function setInvoice($invoice)
+    {
+        $this->invoice = $invoice;
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getPosition()
+    {
+        return $this->position;
+    }
+
+    /**
+     * @param int $position
+     * @return InvoiceItem
+     */
+    public function setPosition($position)
+    {
+        $this->position = $position;
+        return $this;
     }
 }

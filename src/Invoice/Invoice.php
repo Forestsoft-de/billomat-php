@@ -137,6 +137,7 @@ class Invoice extends Resource implements IResource, IInvoice
     protected $netGross;
 
     /**
+     * Währungskurs 
      * @var float
      */
     protected $quote = 1.0;
@@ -198,7 +199,7 @@ class Invoice extends Resource implements IResource, IInvoice
         ITemplate $template = null,
         IRecurring $recurring = null,
         IInvoice $invoice = null,
-        array $items = null)
+        \ArrayObject $items = null)
     {
         $this->client =       $this->_createOrSet($client, "Forestsoft\Billomat\Factory\Customer");
         $this->contact =      $this->_createOrSet($contact, "Forestsoft\Billomat\Contact\Factory");
@@ -208,7 +209,12 @@ class Invoice extends Resource implements IResource, IInvoice
         $this->template =     $this->_createOrSet($template, "Forestsoft\Billomat\Template\Factory");
         $this->recurring =    $this->_createOrSet($recurring, "Forestsoft\Billomat\Recurring\Factory");
         $this->invoice =      $invoice; //prevent loop
-        $this->items =        $items;
+
+        if ($items) {
+            $this->items = $items;
+        } else {
+            $this->items = new \ArrayObject();
+        }
 
         $this->paymentTypes = new \ArrayObject();
     }
@@ -292,35 +298,52 @@ class Invoice extends Resource implements IResource, IInvoice
             $invoice["contact_id"] = $this->getContact()->getId();
         };
 
+        foreach($this->items as $item) {
+            /** @var InvoiceItem $item */
+            $requestItem = [
+                "unit" => $item->getUnit(),
+                "unit_price" => $item->getUnitPrice(),
+                "quantity" => $item->getQuantity(),
+                "title" => $item->getTitle(),
+            ];
+
+            if ($item->getArticleId()) {
+                $requestItem["article_id"] = $item->getArticleId();
+            }
+
+            $items[] = $requestItem;
+        }
+
         return [
             "invoice" => array_merge(
                 [
-                "client_id" => $this->getClient()->getId(),
-                "address" => $this->getAddress(),
-                "number_pre" => $this->getNumberPre(),
-                "number" => $this->getNumber(),
-                "number_length" => $this->getNumberLength(),
-                "date" => $this->getDate(),
-                "supply_date" => $this->getSupplyDate(),
-                "supply_date_type" => $this->getSupplyDateType(),
-                "due_date" => $this->getDueDate(),
-                "discount_rate" => $this->getDiscountRate(),
-                "discount_date" => $this->getDiscountDate(),
-                "title" => $this->getTitle(),
-                "label" => $this->getLabel(),
-                "intro" => $this->getIntro(),
-                "note" => $this->getNote(),
-                "reduction" => $this->getReduction(),
-                "currency_code" => $this->getCurrencyCode(),
-                "net_gross" => $this->getNetGross(),
-                "quote" => $this->getQuote(),
-                "payment_types" => implode(",", iterator_to_array($this->getPaymentTypes())),
-                "invoice_id" => $this->getInvoice()->getId(),
-                "offer_id" => $this->getOffer()->getId(),
-                "confirmation_id" => $this->getConfirmation()->getId(),
-                "recurring_id" => $this->getRecurring()->getId(),
-                "free_text_id" => $this->getFreetext()->getId(),
-                "template_id" => $this->getTemplate()->getId()
+                    "client_id" => $this->getClient()->getId(),
+                    "address" => $this->getAddress(),
+                    "number_pre" => $this->getNumberPre(),
+                    "number" => $this->getNumber(),
+                    "number_length" => $this->getNumberLength(),
+                    "date" => $this->getDate(),
+                    "supply_date" => $this->getSupplyDate(),
+                    "supply_date_type" => $this->getSupplyDateType(),
+                    "due_date" => $this->getDueDate(),
+                    "discount_rate" => $this->getDiscountRate(),
+                    "discount_date" => $this->getDiscountDate(),
+                    "title" => $this->getTitle(),
+                    "label" => $this->getLabel(),
+                    "intro" => $this->getIntro(),
+                    "note" => $this->getNote(),
+                    "reduction" => $this->getReduction(),
+                    "currency_code" => $this->getCurrencyCode(),
+                    "net_gross" => $this->getNetGross(),
+                    "quote" => $this->getQuote(),
+                    "payment_types" => implode(",", iterator_to_array($this->getPaymentTypes())),
+                    "invoice_id" => $this->getInvoice()->getId(),
+                    "offer_id" => $this->getOffer()->getId(),
+                    "confirmation_id" => $this->getConfirmation()->getId(),
+                    "recurring_id" => $this->getRecurring()->getId(),
+                    "free_text_id" => $this->getFreetext()->getId(),
+                    "template_id" => $this->getTemplate()->getId(),
+                    "invoice-items" => $items
                 ],
                 $invoice
             )
@@ -726,6 +749,8 @@ class Invoice extends Resource implements IResource, IInvoice
     }
 
     /**
+     * Währungskurs
+     * 
      * @param float $quote
      * @return Invoice
      */
@@ -736,6 +761,8 @@ class Invoice extends Resource implements IResource, IInvoice
     }
 
     /**
+     * Währungskurs
+     * 
      * @return float
      */
     public function getQuote()
